@@ -1,0 +1,10 @@
+eclipse.preferences.version=1
+encoding//src/main/java/yamp/com/common/ResponseJsonPageListBean.java=UTF-8
+encoding//src/main/java/yamp/com/intecepter/LoginInteceptor.java=UTF-8
+encoding//src/main/java/yamp/com/util/Const.java=UTF-8
+encoding//src/main/java/yamp/com/util/JsonDateTimeValueProcessor.java=UTF-8
+encoding//src/main/java/yamp/com/util/JsonDateValueProcessor.java=UTF-8
+encoding//src/main/java/yamp/com/util/JsonPrintUtil.java=UTF-8
+encoding//src/main/java/yamp/com/util/JsonUtils.java=UTF-8
+encoding//src/main/java/yamp/com/util/SNUtil.java=UTF-8
+encoding//src/main/webapp/datas/nav.json=UTF-8

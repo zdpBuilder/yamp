@@ -1,0 +1,19 @@
+[
+ 
+      {
+        "title": "商品列表",
+        "icon": "fa fa-shopping-bag",
+        "href": "shopping/goodsList.jsp",
+        "spread": false
+      },{
+        "title": "购物车",
+        "icon": "fa fa-shopping-cart",
+        "href": "shopping/orderList.jsp",
+        "spread": false
+      },
+      {
+        "title": "订单列表",
+        "icon": "fa fa-shopping-cart",
+        "href": "shopping/orderListShow.jsp",
+        "spread": false
+      }]
