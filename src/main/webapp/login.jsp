@@ -13,9 +13,9 @@
 	<body class="beg-login-bg">
 		<div class="beg-login-box">
 			<header>
-				<h1>登录</h1>
+				<h1>冰糕厂后台管理登录</h1>
 			</header>
-			<div class="beg-login-main">
+			<div class="beg-login-main" >
 				<form class="layui-form" method="post">
 					<div class="layui-form-item">
 						<label class="beg-login-icon">
@@ -30,6 +30,11 @@
 						<input type="password" name="password" lay-verify="required" autocomplete="off" placeholder="这里输入密码" class="layui-input">
 					</div>
 					<div class="layui-form-item">
+						    <div class="layui-input-block" style="margin-left:20px;">
+						      <input type="radio" name="roleStatus" value="1" title="管理员" checked="">
+						      <input type="radio" name="roleStatus" value="2" title="售货员">
+						      <input type="radio" name="roleStatus" value="3" title="送货员">
+						    </div>
 						<div class="beg-pull-right" style="margin-right:100px;">
 							<button class="layui-btn layui-btn-primary" lay-submit="" lay-filter="login">
                             <i class="layui-icon">&#xe650;</i> 登录
@@ -40,7 +45,7 @@
 				</form>
 			</div>
 			<footer>
-				<p>实训F6 © 545226478@qq.com</p>
+				<p>@copyRight yamp</p>
 			</footer>
 		</div>
 		<script type="text/javascript" src="plugins/layui/layui.js"></script>
@@ -54,12 +59,13 @@
 				    var formJson = data.field;
 					$.ajax({
 			   			method: "post",
-			   			url:"${pageContext.request.contextPath}/user/login",
+			   			url:"${pageContext.request.contextPath}/login",
 			   			data: formJson,
-			   			success:function(result){	 	  			 		
+			   			success:function(result){	   		   
                        	if(result){
-                       		result=result.data;
-	               	if(result==1){     		  
+                       		var datas = result.data;
+	               	  if(datas==1){
+	               		  
 			               		location.href='index.jsp';        		
 			               	}else{ 
 			               	 setTimeout(function () {                			                       

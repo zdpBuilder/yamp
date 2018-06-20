@@ -1,19 +1,14 @@
-﻿<%@ page language="java" import="yamp.com.model.SysUser,org.springframework.util.DigestUtils" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+﻿<%@ page language="java" import="yamp.com.model.SysUser" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%
 SysUser currentLoginUser = (SysUser) session.getAttribute("CurrentLoginUserInfo");
-int id=0;
-String name="未登录";
-   if(null!=currentLoginUser){
-	   id=currentLoginUser.getId();
-	   name=currentLoginUser.getName();  
-   }
+    int id=currentLoginUser.getId();
 %>
 <!DOCTYPE html>
 <html>
 
 	<head>
 		<meta charset="utf-8">
-		<title>冰糕厂后台管理系统</title>
+		<title>冰糕厂后台管理</title>
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -28,14 +23,14 @@ String name="未登录";
 	</head>
 
 	<body>
-	
+	<input  type="hidden"  value="${loginStatus}" id="roleStatus"/>
 		<div class="layui-layout layui-layout-admin" style="border-bottom: solid 5px #1aa094;">
 			<div class="layui-header header header-demo" style="background-color: #393D49">
 				<div class="layui-main">
 					<div class="admin-login-box">
                         <!--logo-->
 						<a class="logo" style="left: 0;" href="">
-							<span style="font-size: 22px;text-align:center;">购物车</span>
+							<span style="font-size: 22px;color:#fff;">冰糕厂后台管理</span>
 						</a>
 						<div class="admin-side-toggle">
 							<i class="fa fa-bars" aria-hidden="true"></i>
@@ -44,23 +39,30 @@ String name="未登录";
 							<i class="fa fa-life-bouy" aria-hidden="true"></i>
 						</div>
 					</div>
-					<ul class="layui-nav admin-header-item" disabled>
+					<ul class="layui-nav admin-header-item">	
 						<li class="layui-nav-item" >
-							<a href="javascript:;" class="admin-header-user"  >
-								<span >${CurrentLoginUserInfo.userName}</span>
+							<a href="javascript:;" class="admin-header-user"  style="padding-left:80px;">
+					<!--	<img src="images/0.jpg" />-->
+								<span>${CurrentLoginUserInfo.name}</span>
 							</a>
-							 <dl class="layui-nav-child">
+							<dl class="layui-nav-child">
 								<dd>
-									<a href="#"id="logout"><i class="fa fa-sign-out" aria-hidden="true"></i> 注销</a>
+									<a  id="editSysUserDatas"><i class="fa fa-user-circle" aria-hidden="true"></i> 个人资料</a>
 								</dd>
-							</dl> 
+								<dd>
+									<a  id="editSysUserPassword"><i class="fa fa-user-circle" aria-hidden="true"></i>修改密码</a>
+								</dd>						
+								<dd>
+									<a href="/yamp/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> 注销</a>
+								</dd>
+							</dl>
 						</li>
-					</ul>
+					</ul>		
 				</div>
 			</div>
             <!--左侧导航栏-->
 			<div class="layui-side layui-bg-black" id="admin-side">
-               
+
 				<div class="layui-side-scroll" id="admin-navbar-side" lay-filter="side"></div>
 			</div>
             <!--默认首页-->
@@ -74,7 +76,7 @@ String name="未登录";
 					</ul>
 					<div class="layui-tab-content" style="min-height: 150px; padding: 5px 0 0 0;">
 						<div class="layui-tab-item layui-show">
-							<iframe src="shopping/goodsList.jsp"></iframe>
+							<iframe src="mainInformal.html"></iframe>
 						</div>
 					</div>
 				</div>
@@ -83,14 +85,15 @@ String name="未登录";
 			<div class="layui-footer footer footer-demo" id="admin-footer">
 				<div class="layui-main">
 					<p>2018 &copy;
-						<a href="">实训F6</a> F6云提供计算服务
+						<a href="">ITF4</a> LGPL license
 					</p>
 				</div>
 			</div>
 			<div class="site-tree-mobile layui-hide">
 				<i class="layui-icon">&#xe602;</i>
 			</div>
-			<div class="site-mobile-shade"></div>		
+			<div class="site-mobile-shade"></div>
+			
 			<script type="text/javascript" src="plugins/layui/layui.js"></script>
 			<script type="text/javascript" src="datas/nav.js"></script>
 			<script src="js/index.js"></script>
@@ -98,25 +101,11 @@ String name="未登录";
 				layui.use('layer', function() {
 					var $ = layui.jquery,
 						layer = layui.layer;
-				   //退出
-				   $("#logout").click(function(){
-					   $.ajax({
-						   url:"/gouwuche/user/logout",
-						   success:function(res){
-							   if(res){
-								   if(res.data==1){
-									   location.href='login.jsp';      
-								   }					   
-							   }
-						   }
-					   });
-				   });
-				  
 					//修改当前用户个人资料
 			      	$("#editSysUserDatas").click(function(){
 			      		layer.open({
 			      		  type: 2 //Page层类型
-			      		  ,area: ['680px', '388px']
+			      		  ,area: ['388px', '300px']
 			      		  ,title:  ['个人资料', '']
 			      		  ,shade: 0.6 //遮罩透明度
 			      		  ,fixed: true //位置固定

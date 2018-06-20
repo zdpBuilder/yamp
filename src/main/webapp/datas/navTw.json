@@ -1,0 +1,15 @@
+[
+  {
+    "title": "订单管理",
+    "icon": "fa fa-cogs",
+    "spread": true,
+    "children": [
+      {
+        "title": "结账管理",
+        "icon": "fa fa-user-circle-o",
+        "href": "admin/usersList.jsp",
+        "spread": false
+      }
+      ]
+  }
+  ]

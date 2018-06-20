@@ -6,5 +6,5 @@ import yamp.com.model.SysUser;
 
 
 public interface UsersService {
-	 public SysUser login(String loginId , String password);	
+	 public SysUser login(String loginId , String password,Integer roleStatus);	
 }

@@ -1,0 +1,61 @@
+[
+  {
+    "title": "系统管理",
+    "icon": "fa fa-cogs",
+    "spread": true,
+    "children": [
+      {
+        "title": "管理员管理",
+        "icon": "fa fa-user-circle-o",
+        "href": "admin/usersList.jsp",
+        "spread": false
+      }
+      ]
+  },{
+    "title": "商品管理",
+    "icon": "fa fa-users",
+    "spread": true,
+    "children": [
+      {
+        "title": "商品管理",
+        "icon": "fa fa-user-circle-o",
+        "href": "admin/list_teacher.jsp",
+        "spread": false
+      },{
+        "title": "供应商管理",
+        "icon": "fa fa-user-circle-o",
+        "href": "admin/studentsList.jsp",
+        "spread": false
+      },{
+        "title": "品牌管理",
+        "icon": "fa fa-user-circle-o",
+        "href": "admin/studentsList.jsp",
+        "spread": false
+      }
+    ]
+  }, 
+  {
+    "title": "订单管理",
+    "icon": "fa-cubes",
+    "spread": true,
+    "children": [
+      {
+        "title": "查看订单", 
+        "icon": "fa fa-map-o",
+        "href": "admin/courseList.jsp",
+        "spread": false
+      }
+    ]
+  }, {
+    "title": "账单总览",
+    "icon": "fa-cubes",
+    "spread": true,
+    "children": [
+      {
+        "title": "收入/支出统计", 
+        "icon": "fa fa-map-o",
+        "href": "admin/courseList.jsp",
+        "spread": false
+      }
+    ]
+  }]

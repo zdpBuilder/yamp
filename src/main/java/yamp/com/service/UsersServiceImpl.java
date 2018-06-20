@@ -23,13 +23,13 @@ public class UsersServiceImpl implements UsersService {
 
 	@Autowired
 	SysUserMapper sysUserMapper; 
-	public SysUser login(String loginId, String password) {
+	public SysUser login(String loginId, String password,Integer roleStatus) {
 		
-			if (StringUtils.isNotBlank(loginId) && StringUtils.isNotBlank(password)) {
+			if (StringUtils.isNotBlank(loginId) && StringUtils.isNotBlank(password)&&roleStatus!=null) {
 				password = DigestUtils.md5DigestAsHex(password.getBytes());		
 					SysUserExample example = new SysUserExample();
 					Criteria criteria = example.createCriteria();
-					criteria.andLoginPasswordEqualTo(password).andLoginIdEqualTo(loginId).andStatusEqualTo(1);
+					criteria.andLoginPasswordEqualTo(password).andLoginIdEqualTo(loginId).andStatusEqualTo(roleStatus);
 					List<SysUser> sysUsers = sysUserMapper.selectByExample(example);
 			  if(sysUsers.size()>0&&sysUsers!=null) {
 				  return sysUsers.get(0);

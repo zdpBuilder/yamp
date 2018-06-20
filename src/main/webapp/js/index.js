@@ -59,13 +59,24 @@ layui.config({
     }).resize();
 
     //设置navbar
+    var navBar=null;
+    if($("#roleStatus").val()==1){
+    	navBar='datas/navOn.json';
+    }
+    if($("#roleStatus").val()==2){
+    	navBar='datas/navTw.json';
+    }
+    if($("#roleStatus").val()==3){
+    	navBar='datas/navTh.json';
+    }
+    
     navbar.set({
         spreadOne: true,
         elem: '#admin-navbar-side',
         cached: true,
        // data: navs
         cached:false,
-		url: 'datas/nav.json'
+		url: navBar
     });
     //渲染navbar
     navbar.render();
