@@ -34,7 +34,7 @@
         <property name="enableSubPackages" value="false"/>  
     </javaClientGenerator>
     
-    <table schema="yamp"  tableName="customer" domainObjectName="Customer"
+    <table schema="yamp"  tableName="bill" domainObjectName="Bill"
            enableCountByExample="true" enableUpdateByExample="true"
            enableDeleteByExample="true" enableSelectByExample="true"
            selectByExampleQueryId="true">

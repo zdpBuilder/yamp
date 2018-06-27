@@ -19,17 +19,22 @@
       {
         "title": "商品管理",
         "icon": "fa fa-user-circle-o",
-        "href": "admin/list_teacher.jsp",
+        "href": "admin/goodsList.jsp",
         "spread": false
       },{
         "title": "供应商管理",
         "icon": "fa fa-user-circle-o",
-        "href": "admin/studentsList.jsp",
+        "href": "admin/braAgnTypList.jsp?roleStatus=2",
         "spread": false
       },{
         "title": "品牌管理",
         "icon": "fa fa-user-circle-o",
-        "href": "admin/studentsList.jsp",
+        "href": "admin/braAgnTypList.jsp?roleStatus=1",
+        "spread": false
+      },{
+        "title": "种类管理",
+        "icon": "fa fa-user-circle-o",
+        "href": "admin/braAgnTypList.jsp?roleStatus=3",
         "spread": false
       }
     ]
@@ -40,13 +45,27 @@
     "spread": true,
     "children": [
       {
-        "title": "查看订单", 
+        "title": "进/出货订单管理", 
         "icon": "fa fa-map-o",
-        "href": "admin/courseList.jsp",
+        "href": "admin/billList.jsp",
         "spread": false
       }
     ]
-  }, {
+  }, 
+  {
+    "title": "库存管理",
+    "icon": "fa-cubes",
+    "spread": true,
+    "children": [
+      {
+        "title": "库存查看", 
+        "icon": "fa fa-map-o",
+        "href": "admin/stockList.jsp",
+        "spread": false
+      }
+    ]
+  },
+  {
     "title": "账单总览",
     "icon": "fa-cubes",
     "spread": true,
@@ -54,7 +73,7 @@
       {
         "title": "收入/支出统计", 
         "icon": "fa fa-map-o",
-        "href": "admin/courseList.jsp",
+        "href": "admin/outIntoCount.jsp",
         "spread": false
       }
     ]
