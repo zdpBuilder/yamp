@@ -48,7 +48,7 @@ if(roleStatus!=null){
 	        
 	        <label class="layui-form-label" style="font-size:12px;line-height:10px;"><%=pageName%>名称</label>
 	         <div class="layui-input-block">
-	            <input type="text" name="name" id="name" lay-verify="required" placeholder="必填项" autocomplete="off"
+	            <input type="text" name="name" id="name" lay-verify="required|username" placeholder="必填项" autocomplete="off"
 	                   class="layui-input layui-form-danger" style="height:26px;font-size:12px;">
 	        </div>
         </div>
@@ -78,6 +78,9 @@ if(roleStatus!=null){
     	  form.render();
       }
       
+      form.verify({  
+      	username:[/^.{0,30}$/,'请输入小于30个字的名称！'],
+      });
       //表单元素赋值
       var brAgnTypId = <%=id %>;
       $.ajax({

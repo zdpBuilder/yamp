@@ -74,7 +74,7 @@ dd {
 							style="font-size: 12px; line-height: 10px;">供应商名称</label>
 						 <div class="layui-input-block">
 					           <select name="angName" id="angName" lay-verify="required">
-					            <option value="0" selected >请选择</option>	            
+					            <option value="" selected >请选择</option>	            
 					           </select>
 	                     </div>
 					</div>
@@ -82,7 +82,7 @@ dd {
 						<label class="layui-form-label"
 							style="font-size: 12px; line-height: 10px;">商品支进价</label>
 						<div class="layui-input-block">
-							<input type="text" name="branchBidPrice" id="branchBidPrice" lay-verify="required"
+							<input type="text" name="branchBidPrice" id="branchBidPrice" lay-verify="required|Isdouble"
 								placeholder="必填项" autocomplete="off"
 								class="layui-input layui-form-danger"
 								style="height: 26px; font-size: 12px;">
@@ -92,7 +92,7 @@ dd {
 						<label class="layui-form-label"
 							style="font-size: 12px; line-height: 10px;">商品箱进价</label>
 						<div class="layui-input-block">
-							<input type="text" name="boxBidPrice" id="boxBidPrice" lay-verify="required"
+							<input type="text" name="boxBidPrice" id="boxBidPrice" lay-verify="required|Isdouble"
 								placeholder="必填项" autocomplete="off"
 								class="layui-input layui-form-danger"
 								style="height: 26px; font-size: 12px;">
@@ -102,7 +102,7 @@ dd {
 						<label class="layui-form-label"
 							style="font-size: 12px; line-height: 10px;">商品支单价</label>
 						<div class="layui-input-block">
-							<input type="text" name="branchPrice" id="branchPrice" lay-verify="required"
+							<input type="text" name="branchPrice" id="branchPrice" lay-verify="required|Isdouble"
 								placeholder="必填项" autocomplete="off"
 								class="layui-input layui-form-danger"
 								style="height: 26px; font-size: 12px;">
@@ -112,7 +112,7 @@ dd {
 						<label class="layui-form-label"
 							style="font-size: 12px; line-height: 10px;">商品箱单价</label>
 						<div class="layui-input-block">
-							<input type="text" name="boxPrice" id="boxPrice" lay-verify="required"
+							<input type="text" name="boxPrice" id="boxPrice" lay-verify="required|Isdouble"
 								placeholder="必填项" autocomplete="off"
 								class="layui-input layui-form-danger"
 								style="height: 26px; font-size: 12px;">
@@ -122,7 +122,7 @@ dd {
 						<label class="layui-form-label"
 							style="font-size: 12px; line-height: 10px;">商品箱个数</label>
 						<div class="layui-input-block">
-							<input type="text" name="eachBoxNum" id="eachBoxNum" lay-verify="required"
+							<input type="text" name="eachBoxNum" id="eachBoxNum" lay-verify="required|IsIntegerPositive"
 								placeholder="必填项" autocomplete="off"
 								class="layui-input layui-form-danger"
 								style="height: 26px; font-size: 12px;">
@@ -132,7 +132,7 @@ dd {
 						<label class="layui-form-label"
 							style="font-size: 12px; line-height: 10px;">商品支数量</label>
 						<div class="layui-input-block">
-							<input type="text" name="branchCount" id="branchCount" lay-verify="required"
+							<input type="text" name="branchCount" id="branchCount" lay-verify="required|IsIntegerNotNagtive"
 								placeholder="必填项" autocomplete="off"
 								class="layui-input layui-form-danger"
 								style="height: 26px; font-size: 12px;">
@@ -142,7 +142,7 @@ dd {
 						<label class="layui-form-label"
 							style="font-size: 12px; line-height: 10px;">商品箱数量</label>
 						<div class="layui-input-block">
-							<input type="text" name="boxCount" id="boxCount" lay-verify="required"
+							<input type="text" name="boxCount" id="boxCount" lay-verify="required|IsIntegerNotNagtive"
 								placeholder="必填项" autocomplete="off"
 								class="layui-input layui-form-danger"
 								style="height: 26px; font-size: 12px;">
@@ -171,7 +171,14 @@ dd {
                 , upload = layui.upload;
         var $ = layui.jquery;
        var goods=null;
-      //重新渲染表单
+       
+       
+         form.verify({  
+        	 IsIntegerNotNagtive:[/^\d+$/,'请输入自然数！'],
+        	 IsIntegerPositive:[/^[0-9]*[1-9][0-9]*$/,'请输入非零自然数！'],
+        	 Isdouble: [/^(\d+\.\d{1,2}|[1-9][0-9]*)$/,'请输入非负非零的两位小数']
+      });
+       //重新渲染表单
       function renderForm(){
     	  form.render();
       }
@@ -218,7 +225,13 @@ dd {
      
         //保存按钮
           form.on('submit(addForm)', function (data) {
+        	  
+        	  
             var formJson = data.field;
+            if(formJson.branchCount==0&&formJson.boxCount==0){
+                parent.layer.msg('箱数量和支数量不能同时为0！', {title:'提示消息',icon: 0, time: 1500}); //1s后自动关闭); 
+            	return ;
+            }
             goods.branchCount=formJson.branchCount;
             goods.boxCount=formJson.boxCount;
             goods.branchBidPrice=formJson.branchBidPrice;
@@ -226,7 +239,6 @@ dd {
             goods.branchPrice=formJson.branchPrice;
             goods.boxPrice=formJson.boxPrice;
             goods["angName"]=formJson.angName;
-            alert(JSON.stringify(goods));
             parent.initGoodsData(goods);
             //关闭窗口 并给父页面传值
             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引                   	                       

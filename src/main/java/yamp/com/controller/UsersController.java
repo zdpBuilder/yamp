@@ -141,4 +141,17 @@ public class UsersController {
 	 			JsonPrintUtil.printObjDataWithKey(response, null, "data");
 	 		}
 	 	}	
+		// µÇÂ¼ÃûÐ£Ñé
+	 	@RequestMapping(value = "loginIdCheck", method = RequestMethod.POST)
+	 	@ResponseBody
+	 	public boolean loginIdCheck(String loginId, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	 		SysUserExample example=  new SysUserExample();
+	 		SysUserExample.Criteria criteria = example.createCriteria();
+	 		criteria.andLoginIdEqualTo(loginId);
+	 		List<SysUser> list =sysUserMapper.selectByExample(example);
+	 		if(list.size()>0&&list!=null) {
+	 			return false;
+	 		}
+	 		return true;
+	 	}
 }

@@ -58,7 +58,7 @@ if(id==currId){
 	        
 	        <label class="layui-form-label" style="font-size:12px;line-height:10px;">真实姓名</label>
 	         <div class="layui-input-block">
-	            <input type="text" name="name" id="userName" lay-verify="required" placeholder="必填项" autocomplete="off"
+	            <input type="text" name="name" id="userName" lay-verify="required|username" placeholder="必填项" autocomplete="off"
 	                   class="layui-input layui-form-danger" style="height:26px;font-size:12px;">
 	        </div>
         </div>
@@ -93,6 +93,10 @@ if(id==currId){
     	  form.render();
       }
       
+      //自定义表单验证
+      form.verify({  
+      	username:[/^.{0,6}$/,'姓名输入过长！'],
+      });
       //表单元素赋值
       var userId = <%=id %>;
       $.ajax({

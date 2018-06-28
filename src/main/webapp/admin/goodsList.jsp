@@ -37,7 +37,7 @@
 		            <div class="fr" >
 		                <span class="layui-form-label" style=" margin-top:5px;font-size:12px;vertical-align: top;line-height:10px;">搜索条件：</span>
 		                <div class="layui-input-inline">
-		                    <input type="text" autocomplete="off" id="keywords" name="keywords" placeholder="名称" class="layui-input " style="height:26px;font-size:12px;"/>
+		                    <input type="text" autocomplete="off" id="keywords" name="keywords" placeholder="名称、商品编号" class="layui-input " style="height:26px;font-size:12px;"/>
 		                </div> 
 		                <button class="layui-btn layui-btn-sm" id="btn-search" style="font-size: 10px;"><i class="layui-icon" style="font-size: 14px;">&#xe615;</i>&nbsp;查询</button>
 		            </div>

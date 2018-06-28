@@ -4,15 +4,10 @@
     "icon": "fa-cubes",
     "spread": true,
     "children": [
-      {
-        "title": "查看订单", 
+     {
+        "title": "订单查看/确认", 
         "icon": "fa fa-map-o",
-        "href": "admin/courseList.jsp",
-        "spread": false
-      },{
-        "title": "确认订单", 
-        "icon": "fa fa-map-o",
-        "href": "admin/courseList.jsp",
+        "href": "admin/deliverymanBillList.jsp",
         "spread": false
       }
     ]

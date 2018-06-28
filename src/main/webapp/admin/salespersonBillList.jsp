@@ -30,9 +30,9 @@
 			    <!-- 操作按钮区域 -->
 		        <div class="my-btn-box" style="margin-bottom:-10px;">
 		            <div class="fl">
-		                <a class="layui-btn layui-btn-sm" id="btn-add-into"><i class="layui-icon"></i>进货新增</a>
+		       
 		                <a class="layui-btn layui-btn-sm" id="btn-add-out"><i class="layui-icon"></i>销售新增</a>
-		                <a class="layui-btn layui-btn-sm" id="btn-delete-all" data-type="deleteBatch"><i class="layui-icon"></i>删除</a>
+
 		                <a class="layui-btn layui-btn-sm" id="btn-refresh" data-type="refresh"><i class="layui-icon">&#x1002;</i>刷新</a>
 		            </div>
 		            <div class="fr" >
@@ -83,13 +83,13 @@
 			       {type: 'checkbox'}
 			      ,{field: 'orderCode', title: '<span style="color:#000;font-weight:bold;">订单编号</span>',align: 'center'}
 			      ,{field: 'intoOrOutStatus', title: '<span style="color:#000;font-weight:bold;">订单状态</span>',align: 'center',templet: '#intoOrOutStatusTem'}		  
-			      ,{field: 'lineOrderStatus', title: '<span style="color:#000;font-weight:bold;">确认订单</span>',align: 'center', templet: '#checkboxTpl', event: 'setSign'}		  
 			      ,{field: '', title: '<span style="color:#000;font-weight:bold;">操作</span>',align: 'center',toolbar: '#toolbar'}
 			    ]]
 	        	,url:'${pageContext.request.contextPath}/bill/list'
 	        	,id: 'billListTable'
 	        	,where: {
-	        		keywords: $("#keywords").val()
+	        		keywords: $("#keywords").val(),
+	        		intoOrOutStatus:1
 	        	}//查询传参
 			    //,skin: 'line' //表格风格
 			    ,even: true  //隔行换色
@@ -224,98 +224,7 @@
 	      	//toolBar操作列监听
 	      	 table.on('tool(tableFilter)', function(obj){
 	      		var data = obj.data;
-          	//确认订单
-	      		if(obj.event === 'setSign'){    
-	      			layer.confirm('确认修改订单处理状态？', {
-		      	    	  title: "确认消息", //标题
-		      	    	  btnAlign: 'c',
-		      	    	  btn: ['确认','取消'] //按钮
-		      	    	}, function(){	
-        	  			   if(data.lineOrderStatus==1){
-        	  				 data.lineOrderStatus=0; 
-        	  			   }else{    	  			 
-        	  				 data.lineOrderStatus=1;   
-        	  			   }
-        	  			   console.info(data);
-		      	    		$.ajax({
-		        	  			method: "post",
-		        	  			url:"${pageContext.request.contextPath}/bill/save",
-		        	  			data:data,
-		        	  			success:function(result){    	
-		        	  				if(result.data==1){
-		        		  				layer.msg('修改成功！', {time: 1000}); //1s后自动关闭
-		        		  				//刷新表格内容
-		        		  		        table.reload('billListTable', {
-		        		  		          page: {
-		        		  		            curr: currPageNum //从当前页开始
-		        		  		          }
-		        		  		        });
-		        	  				}else{
-		        	  					layer.msg('修改失败！', {time: 1000}); //1s后自动关闭
-		        	  					reloadTable(1);
-		        	  				}
-		        	  	        }
-		        			}); 
-		      	    	}, function(){
-		      	    	  //取消
-		      	    	 reloadTable(1);
-		      	    	});
-	      	    }
-	      	    if(obj.event === 'del'){
-	      	    
-	      	      //layer.msg('ID：'+ data.id + ' 的删除操作');
-	      	    	layer.confirm('确认删除用户信息？', {
-	      	    	  title: "确认消息", //标题
-	      	    	  btnAlign: 'c',
-	      	    	  btn: ['确认','取消'] //按钮
-	      	    	}, function(){
-	      	    		//单条删除
-	      	    		$.ajax({
-	        	  			method: "post",
-	        	  			url:"${pageContext.request.contextPath}/bill/deleteBatch",
-	        	  			data:{"idStr":data.id},
-	        	  			success:function(result){
-	        	  				if(result.data==1){
-	        		  				layer.msg('删除成功！', {time: 1000}); //1s后自动关闭
-	      	    					//console.info(obj);
-	        		  				//$(obj.tr).fadeOut();
-	        		  				//刷新表格内容
-	        		  		        table.reload('billListTable', {
-	        		  		          page: {
-	        		  		            curr: currPageNum //从当前页开始
-	        		  		          }
-	        		  		          ,where: {
-	        		  		        	//传参
-	        		  		            keywords: $("#keywords").val()
-	        		  		          }
-	        		  		        });
-	        		  				
-	        	  				}else{
-	        	  					layer.msg('删除失败！', {time: 1000}); //1s后自动关闭
-	        	  				}
-	        	  	        }
-	        			});
-	      	    	   
-	      	    	}, function(){
-	      	    	  //取消
-	      	    	});
-	      	      
-	      	    }
-	      	  	if(obj.event === 'edit'){
-	      	      //编辑操作
-	      	  	  //layer.msg('ID：'+ data.id + ' 的编辑操作');
-	      	      layer.open({
-	        		  type: 2 //Page层类型
-	        		  ,area: ['100%', '100%']
-	        		  ,title: ['编辑信息', '']
-	        		  ,shade: 0.6 //遮罩透明度
-	        		  ,fixed: true //位置固定
-	        		  ,maxmin: false //开启最大化最小化按钮
-	        		  ,anim: 5 //0-6的动画形式，-1不开启
-	        		  ,content: 'billInfo.jsp?id='+data.id
-	        	   });
-	      	      
-	      	    }
+          	
 	      		if(obj.event === 'show'){
 		      	      //编辑操作
 		      	  	  //layer.msg('ID：'+ data.id + ' 的编辑操作');
@@ -342,7 +251,6 @@
 <script type="text/html" id="toolbar">
 
 	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="show" style="font-size:10px;"><i class="layui-icon">&#xe615;</i>查看订单详情</a>
-	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="del" style="font-size:10px;"><i class="layui-icon">&#xe640;</i>删除</a>
 </script>
 <script type="text/html" id="checkboxTpl">
 		{{#  if( d.lineOrderStatus=== 0){ }}

@@ -50,6 +50,7 @@ public class GoodsController extends UploadController {
  			keywords = "%" + keywords + "%";
  			// and or联合查询
  			example.or().andNameLike(keywords).andStatusEqualTo(1);
+ 			example.or().andGoodsCodeLike(keywords).andStatusEqualTo(1);
  		} else {
  			criteria.andStatusEqualTo(1);// 正常状态
  		}
@@ -90,7 +91,7 @@ public class GoodsController extends UploadController {
  			goods.setStatus(1);
  			goods.setCreater(currentLoginUser.getName()+ "");
  			goods.setCreateTime(DateUtil.DateToString(new Date(), "yyyy-MM-dd "));
- 			count = goodsMapper.insert(goods);
+ 			count = goodsMapper.insertSelective(goods);
  			//输出前台Json
  			
  		} 		

@@ -101,8 +101,8 @@ dd {
 		              <span class="layui-form-label" style="font-size:12px;vertical-align: top;line-height:10px;">商品编码</span>
 		               
 			           <div class="layui-input-inline">
-			            <select id="goodsList"  lay-verify="required" lay-search="">
-				          <option value="0">直接选择或搜索选择</option>
+			            <select id="goodsList"  lay-search="">
+				          <option value="">直接选择或搜索选择</option>
 				         </select>
 				          </div>
 		                <button type="button"class="layui-btn layui-btn-xs"  id="btn-add" style="font-size: 10px;"><i class="layui-icon"></i>新增</button>
@@ -199,31 +199,37 @@ dd {
         //保存按钮
           form.on('submit(addForm)', function (data) {
             var formJson = data.field;
-            formJson.goodsIds=JSON.stringify(goodsData);
-            	$.ajax({
-        			method: "post",
-        			url:"../bill/save",
-        			data: formJson,
-        			async:false,
-        			success:function(result){
-        				if(result==null){
-                            parent.layer.msg('保存失败！', {title:'提示消息',icon: 1, time: 1500}); //1s后自动关闭);
-                            return;
-    					}
-        				if(result){
-        					var data = result.data;
-        					if(data<=0){
-                                parent.layer.msg('保存失败！', {title:'提示消息',icon: 1, time: 1500}); //1s后自动关闭);
+           
+           if(goodsData!=null&&goodsData!=""){
+        	   formJson.goodsIds=JSON.stringify(goodsData);
+           	$.ajax({
+       			method: "post",
+       			url:"../bill/save",
+       			data: formJson,
+       			async:false,
+       			success:function(result){
+       				if(result==null){
+                           parent.layer.msg('保存失败！', {title:'提示消息',icon: 1, time: 1500}); //1s后自动关闭);
+                           return;
+   					}
+       				if(result){
+       					var data = result.data;
+       					if(data<=0){
+                               parent.layer.msg('保存失败！', {title:'提示消息',icon: 1, time: 1500}); //1s后自动关闭);
 	                            return;
-        					}
-                        		//关闭窗口 并给父页面传值
-                                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-                                parent.layer.msg('保存成功！', {title:'提示消息',icon: 1, time: 1500}); //1s后自动关闭);                 
-                                 parent.reloadTable(1);         	                       
-                                parent.layer.close(index); 		
-        				}
-        			},
-                });      
+       					}
+                       		//关闭窗口 并给父页面传值
+                               var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                               parent.layer.msg('保存成功！', {title:'提示消息',icon: 1, time: 1500}); //1s后自动关闭);                 
+                                parent.reloadTable(1);         	                       
+                               parent.layer.close(index); 		
+       				}
+       			},
+               });        
+           }else{
+               parent.layer.msg('请添加商品！', {time: 1500}); //1s后自动关闭);   
+           }
+           
         });
         
         //关闭窗口按钮
@@ -307,7 +313,7 @@ dd {
    
       //添加 
       	$("#btn-add").click(function(){
-      		if($("#goodsList").val()==0){
+      		if($("#goodsList").val()==""){
 	  layer.msg('请先选择或输入商品编码！', {time: 1500}); //1s后自动关闭
       			return ;
       		}		

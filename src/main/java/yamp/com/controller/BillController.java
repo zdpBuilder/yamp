@@ -39,7 +39,7 @@ public class BillController {
 	// 账单列表分页查询
 	@RequestMapping("list")
 	@ResponseBody
-	public void getList(HttpServletRequest request, HttpServletResponse response, String keywords, int limit,
+	public void getList(HttpServletRequest request, HttpServletResponse response, Integer intoOrOutStatus,String keywords, int limit,
 			int page) {
 		// limit 每页显示数量
 		// page 当前页码
@@ -49,14 +49,26 @@ public class BillController {
 		example.setPageSize(limit);
 		example.setOrderByClause("player_time desc");
 		BillExample.Criteria criteria = example.createCriteria();
-		if (keywords != null && keywords != "") {
-			keywords = keywords.trim();
-			keywords = "%" + keywords + "%";
-			// and or联合查询
-			example.or().andPlayerLike(keywords).andStatusEqualTo(1);
-		} else {
-			criteria.andStatusEqualTo(1);// 正常状态
+		if(intoOrOutStatus!=null) {
+			if (keywords != null && keywords != "") {
+				keywords = keywords.trim();
+				keywords = "%" + keywords + "%";
+				// and or联合查询
+				example.or().andOrderCodeLike(keywords).andStatusEqualTo(1).andIntoOrOutStatusEqualTo(intoOrOutStatus);
+			} else {
+				criteria.andStatusEqualTo(1).andIntoOrOutStatusEqualTo(intoOrOutStatus);// 正常状态
+			}	
+		}else {
+			if (keywords != null && keywords != "") {
+				keywords = keywords.trim();
+				keywords = "%" + keywords + "%";
+				// and or联合查询
+				example.or().andOrderCodeLike(keywords).andStatusEqualTo(1);
+			} else {
+				criteria.andStatusEqualTo(1);// 正常状态
+			}
 		}
+		
 		// 分页查询
 		List<Bill> billList = billMapper.selectByExample(example);
 		int count = (int) billMapper.countByExample(example);
@@ -91,6 +103,7 @@ public class BillController {
 			// 更新库存
 			List<GoodsExtendsPojo> list = JsonUtils.jsonToList(bill.getGoodsIds(), GoodsExtendsPojo.class);
 			// 进货 状态 0
+			if(list!=null&list.size()>0) {
 			if (bill.getIntoOrOutStatus().equals(0)) {
 				for (GoodsExtendsPojo goodsExtendsPojo : list) {
 					Goods goodsSql = goodsMapper.selectByPrimaryKey(goodsExtendsPojo.getId());
@@ -110,6 +123,7 @@ public class BillController {
 					goodsSql.setBranchCount(goodsSql.getBranchCount() - goodsExtendsPojo.getBranchCount());
 					goodsMapper.updateByPrimaryKeySelective(goodsSql);
 				}
+			}
 			}
 			// 新增账单
 			bill.setStatus(1);

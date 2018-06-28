@@ -37,7 +37,7 @@
   		<div class="layui-form-item" style="margin-bottom:3px;">
 	        <label class="layui-form-label" style="font-size:12px;line-height:10px;">登录账号</label>
 	        <div class="layui-input-block">
-	            <input type="text" name="loginId" id="loginId" lay-verify="required" placeholder="必填项" autocomplete="off" 
+	            <input type="text" name="loginId"  id="loginId" lay-verify="required|loginIdCheck|nameLength|nameformat" placeholder="必填项" autocomplete="off" 
 	            class="layui-input layui-form-danger" style="height:26px;font-size:12px;">
 	        </div>
 	       </div>
@@ -45,7 +45,7 @@
 	        
 	        <label class="layui-form-label" style="font-size:12px;line-height:10px;">真实姓名</label>
 	         <div class="layui-input-block">
-	            <input type="text" name="name" id="userName" lay-verify="required" placeholder="必填项" autocomplete="off"
+	            <input type="text" name="name" id="userName" lay-verify="required|username" placeholder="必填项" autocomplete="off"
 	                   class="layui-input layui-form-danger" style="height:26px;font-size:12px;">
 	        </div>
         </div>
@@ -79,22 +79,33 @@
         elem: '#hiredate' 
      });
     //自定义表单验证
-    form.verify({  	
-    	 phone:[/^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/,'手机号码格式不正确'],
-    	 email: [/^$|^[a-z0-9._%-]+@([a-z0-9-]+\.)+[a-z]{2,4}$|^1[3|4|5|7|8]\d{9}$/, '邮箱格式不正确'],
+    form.verify({  
+    	username:[/^.{0,6}$/,'姓名输入过长！'],
+    	nameLength:[/^.{0,30}$/,'登录名输入过长！'],
+    	nameformat:[/^[0-9A-Za-z]+$/,'登录名只能是字母或者数字'],
+    	loginIdCheck: function(value, item){ //value：表单的值、item：表单的DOM对象   
+    	    var loginIdCheck=null;
+    	    $.ajax({
+       			method: "post",
+       			url:"${pageContext.request.contextPath}/user/loginIdCheck",
+       			data: {"loginId":value},
+       			async:false,
+       			success:function(result){
+       					loginIdCheck=result;	
+       			}
+       			}); 
+    	    if(loginIdCheck==false){
+    	    	return "该用户已被注册!";
+    	    }
+    	  }
     });
   //重新渲染表单
   function renderForm(){
 	  form.render();
   }
   //保存按钮
-  form.on('submit(addForm)', function (data) {
-	  
-	    // formJson.birthday=new Date(formJson.birthday.replace("-","/"));   
+  form.on('submit(addForm)', function (data) {	  
         var formJson = data.field;
-       // formJson.hiredate=new Date(formJson.hiredate.replace("-","/"));
-        //console.info(data);
-       // console.info(formJson);
        	$.ajax({
    			method: "post",
    			url:"${pageContext.request.contextPath}/user/save",

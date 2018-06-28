@@ -29,10 +29,7 @@
 	         <div class="layui-field-box">
 			    <!-- 操作按钮区域 -->
 		        <div class="my-btn-box" style="margin-bottom:-10px;">
-		            <div class="fl">
-		                <a class="layui-btn layui-btn-sm" id="btn-add-into"><i class="layui-icon"></i>进货新增</a>
-		                <a class="layui-btn layui-btn-sm" id="btn-add-out"><i class="layui-icon"></i>销售新增</a>
-		                <a class="layui-btn layui-btn-sm" id="btn-delete-all" data-type="deleteBatch"><i class="layui-icon"></i>删除</a>
+		            <div class="fl">           
 		                <a class="layui-btn layui-btn-sm" id="btn-refresh" data-type="refresh"><i class="layui-icon">&#x1002;</i>刷新</a>
 		            </div>
 		            <div class="fr" >
@@ -89,7 +86,8 @@
 	        	,url:'${pageContext.request.contextPath}/bill/list'
 	        	,id: 'billListTable'
 	        	,where: {
-	        		keywords: $("#keywords").val()
+	        		keywords: $("#keywords").val(),
+	        		intoOrOutStatus:1
 	        	}//查询传参
 			    //,skin: 'line' //表格风格
 			    ,even: true  //隔行换色
@@ -109,92 +107,10 @@
 			  });
 	        
 	        
-	      	//监听表格复选框选择
-	        table.on('checkbox(tableFilter)', function(obj){     
-	        /*   if(obj.checked == true){
-	        	  $(this).parent().parent().parent().css("background-color","#CCC");
-	          }else{
-	        	  $(this).parent().parent().parent().css("background-color","#FFF");
-	          }  */
-	        });
+	    
 	      	
-	      	//进货添加 
-	      	$("#btn-add-into").click(function(){
-	      		layer.open({
-	      		  type: 2 //Page层类型
-	      		  ,area: ['100%', '100%']
-	      		  ,title:  ['新增信息', '']
-	      		  ,shade: 0.6 //遮罩透明度
-	      		  ,fixed: true //位置固定
-	      		  ,maxmin: false //开启最大化最小化按钮
-	      		  ,anim: 5 //0-6的动画形式，-1不开启
-	      		  ,content: 'billInfo.jsp?intoOrOutStatus=0'
-	      	   });
-	      	});
-	      //销售添加 
-	      	$("#btn-add-out").click(function(){
-	      		layer.open({
-	      		  type: 2 //Page层类型
-	      		  ,area: ['100%', '100%']
-	      		  ,title:  ['新增信息', '']
-	      		  ,shade: 0.6 //遮罩透明度
-	      		  ,fixed: true //位置固定
-	      		  ,maxmin: false //开启最大化最小化按钮
-	      		  ,anim: 5 //0-6的动画形式，-1不开启
-	      		  ,content: 'billInfo.jsp?intoOrOutStatus=1'
-	      	   });
-	      	});
-	      	//批量删除
-			$("#btn-delete-all").click(function(){
-				
-				var checkStatus = table.checkStatus('billListTable')
-			    var data = checkStatus.data;//选中数据
-			    
-			    if(data.length>0){
-			    	var idStr = "";
-			    	for(var i=0;i<data.length;i++){	
-			    		idStr = data[i].id + "," + idStr;
-			    	}
-			    	layer.confirm('确认删除 '+data.length+' 条用户信息？', {
-		      	    	  title: "确认消息", //标题
-		      	    	  btn: ['确认','取消'] //按钮
-		      	    	}, function(){
-		      	    		//单条删除
-		      	    		$.ajax({
-		        	  			method: "post",
-		        	  			url:"${pageContext.request.contextPath}/bill/deleteBatch",
-		        	  			data:{"idStr":idStr},
-		        	  			success:function(result){
-		        	  				if(result.data==1){
-		        		  				layer.msg('删除 '+data.length+' 条成功！', {time: 1000}); //1s后自动关闭
-		      	    					
-		        		  				//刷新表格内容
-		        		  		        table.reload('billListTable', {
-		        		  		          page: {
-		        		  		            curr: currPageNum //从当前页开始
-		        		  		          }
-		        		  		          ,where: {
-		        		  		        	//传参
-		        		  		            keywords: $("#keywords").val()
-		        		  		          }
-		        		  		        });
-		        		  				
-		        	  				}else{
-		        	  					layer.msg('删除失败！', {time: 1000}); //1s后自动关闭
-		        	  				}
-		        	  	        }
-		        			});
-		      	    	   
-		      	    	}, function(){
-		      	    	  //取消
-		      	    	});
-			    }else{	    	
-			    	layer.msg('至少选中一条数据！', {time: 1000});  //1s后自动关闭
-			    }
-			    
-	      	});
-	     
-	      	
+	      
+	   
 	      	
 			//页面刷新
 	      	$("#btn-refresh").click(function(){
@@ -261,61 +177,7 @@
 		      	    	 reloadTable(1);
 		      	    	});
 	      	    }
-	      	    if(obj.event === 'del'){
-	      	    
-	      	      //layer.msg('ID：'+ data.id + ' 的删除操作');
-	      	    	layer.confirm('确认删除用户信息？', {
-	      	    	  title: "确认消息", //标题
-	      	    	  btnAlign: 'c',
-	      	    	  btn: ['确认','取消'] //按钮
-	      	    	}, function(){
-	      	    		//单条删除
-	      	    		$.ajax({
-	        	  			method: "post",
-	        	  			url:"${pageContext.request.contextPath}/bill/deleteBatch",
-	        	  			data:{"idStr":data.id},
-	        	  			success:function(result){
-	        	  				if(result.data==1){
-	        		  				layer.msg('删除成功！', {time: 1000}); //1s后自动关闭
-	      	    					//console.info(obj);
-	        		  				//$(obj.tr).fadeOut();
-	        		  				//刷新表格内容
-	        		  		        table.reload('billListTable', {
-	        		  		          page: {
-	        		  		            curr: currPageNum //从当前页开始
-	        		  		          }
-	        		  		          ,where: {
-	        		  		        	//传参
-	        		  		            keywords: $("#keywords").val()
-	        		  		          }
-	        		  		        });
-	        		  				
-	        	  				}else{
-	        	  					layer.msg('删除失败！', {time: 1000}); //1s后自动关闭
-	        	  				}
-	        	  	        }
-	        			});
-	      	    	   
-	      	    	}, function(){
-	      	    	  //取消
-	      	    	});
-	      	      
-	      	    }
-	      	  	if(obj.event === 'edit'){
-	      	      //编辑操作
-	      	  	  //layer.msg('ID：'+ data.id + ' 的编辑操作');
-	      	      layer.open({
-	        		  type: 2 //Page层类型
-	        		  ,area: ['100%', '100%']
-	        		  ,title: ['编辑信息', '']
-	        		  ,shade: 0.6 //遮罩透明度
-	        		  ,fixed: true //位置固定
-	        		  ,maxmin: false //开启最大化最小化按钮
-	        		  ,anim: 5 //0-6的动画形式，-1不开启
-	        		  ,content: 'billInfo.jsp?id='+data.id
-	        	   });
-	      	      
-	      	    }
+	      	
 	      		if(obj.event === 'show'){
 		      	      //编辑操作
 		      	  	  //layer.msg('ID：'+ data.id + ' 的编辑操作');
@@ -342,7 +204,6 @@
 <script type="text/html" id="toolbar">
 
 	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="show" style="font-size:10px;"><i class="layui-icon">&#xe615;</i>查看订单详情</a>
-	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="del" style="font-size:10px;"><i class="layui-icon">&#xe640;</i>删除</a>
 </script>
 <script type="text/html" id="checkboxTpl">
 		{{#  if( d.lineOrderStatus=== 0){ }}

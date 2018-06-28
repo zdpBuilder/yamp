@@ -74,7 +74,7 @@ dd {
 						<label class="layui-form-label"
 							style="font-size: 12px; line-height: 10px;">商品名称</label>
 						<div class="layui-input-block">
-							<input type="text" name="name" id="name" lay-verify="required"
+							<input type="text" name="name" id="name" lay-verify="required|username"
 								placeholder="必填项" autocomplete="off"
 								class="layui-input layui-form-danger"
 								style="height: 26px; font-size: 12px;">
@@ -85,7 +85,7 @@ dd {
 							style="font-size: 12px; line-height: 10px;">品牌名称</label>
 						 <div class="layui-input-block">
 					           <select name="braId" id="braId" lay-verify="required" lay-filter="braIdSel">
-					            <option value="0" selected >请选择</option>	            
+					            <option value="" selected >请选择</option>	            
 					           </select>
 	                     </div>
 					</div>
@@ -94,7 +94,7 @@ dd {
 							style="font-size: 12px; line-height: 10px;">种类名称</label>
 						<div class="layui-input-block">
 					           <select name="typeId" id="typeId" lay-verify="required" lay-filter="typIdSel">
-					            <option value="0" selected >请选择</option>            
+					            <option value="" selected >请选择</option>            
 					           </select>
 	                     </div>
 					</div>
@@ -172,7 +172,7 @@ dd {
 						<label class="layui-form-label"
 							style="font-size: 12px; line-height: 10px;">商品描述</label>
 						<div class="layui-input-block">
-								         <textarea  name="note" id="note"   class="layui-input layui-form-danger"  style="height:50px;font-size:12px;" ></textarea>    
+								         <textarea  name="note" id="note" lay-verify="nameLength" class="layui-input layui-form-danger"  style="height:50px;font-size:12px;" ></textarea>    
 
 						</div>
 					</div>
@@ -208,6 +208,11 @@ dd {
                 , upload = layui.upload;
         var $ = layui.jquery;
 
+      //自定义表单验证
+        form.verify({  
+        	username:[/^.{0,30}$/,'请输入小于30个字的名称！'],
+        	nameLength:[/^.{0,100}$/,'请输入小于100个字的描述！'],
+        });
       //重新渲染表单
       function renderForm(){
     	  form.render();
@@ -232,6 +237,7 @@ dd {
    			data : {"roleStatus":roleStatus,
    				    "page":0,
    				    "limit":0,},
+   				    async:false,
    			url:"../braagntyp/list",
    			success:function(result){
    				 if(result){
@@ -252,14 +258,14 @@ dd {
       
       //下拉框监听事件
        form.on('select(typIdSel)', function(data){
-    	   if(data.value==0){
+    	   if(data.value==""){
     		   $("#typeTitle").val("");
     		  return;
     	   }
     	   $("#typeTitle").val($("#typeId option:selected").text());
     		});
        form.on('select(braIdSel)', function(data){
-    	   if(data.value==0){
+    	   if(data.value==""){
     		   $("#braName").val("");
      		  return;
      	   }

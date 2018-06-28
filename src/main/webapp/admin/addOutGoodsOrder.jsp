@@ -73,7 +73,7 @@ dd {
 						<label class="layui-form-label"
 							style="font-size: 12px; line-height: 10px;">商品支数量</label>
 						<div class="layui-input-block">
-							<input type="text" name="branchCount" id="branchCount" lay-verify="required"
+							<input type="text" name="branchCount" id="branchCount" lay-verify="required|IsIntegerNotNagtive"
 								placeholder="必填项" autocomplete="off"
 								class="layui-input layui-form-danger"
 								style="height: 26px; font-size: 12px;">
@@ -83,7 +83,7 @@ dd {
 						<label class="layui-form-label"
 							style="font-size: 12px; line-height: 10px;">商品箱数量</label>
 						<div class="layui-input-block">
-							<input type="text" name="boxCount" id="boxCount" lay-verify="required"
+							<input type="text" name="boxCount" id="boxCount" lay-verify="required|IsIntegerNotNagtive"
 								placeholder="必填项" autocomplete="off"
 								class="layui-input layui-form-danger"
 								style="height: 26px; font-size: 12px;">
@@ -116,7 +116,9 @@ dd {
       function renderForm(){
     	  form.render();
       }
-      
+      form.verify({  
+    	  IsIntegerNotNagtive:[/^\d+$/,'请输入自然数！'],
+   });
    
       //表单元素赋值
       var goodsId = <%=id %>;
@@ -144,7 +146,10 @@ dd {
             parent.layer.msg('木有那么多货了！', {title:'提示消息',icon: 0, time: 1500}); //1s后自动关闭); 
             	return;
             }
-            
+            if(formJson.branchCount==0&&formJson.boxCount==0){
+                parent.layer.msg('箱数量和支数量不能同时为0！', {title:'提示消息',icon: 0, time: 1500}); //1s后自动关闭); 
+            	return ;
+            }
             goods.branchCount=formJson.branchCount;
             goods.boxCount=formJson.boxCount;
             parent.initGoodsData(goods);

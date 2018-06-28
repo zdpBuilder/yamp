@@ -5,14 +5,9 @@
     "spread": true,
     "children": [
       {
-        "title": "查看订单", 
+        "title": "订单新增/查看", 
         "icon": "fa fa-map-o",
-        "href": "admin/courseList.jsp",
-        "spread": false
-      },{
-        "title": "结算订单", 
-        "icon": "fa fa-map-o",
-        "href": "admin/courseList.jsp",
+        "href": "admin/salespersonBillList.jsp",
         "spread": false
       }
     ]
