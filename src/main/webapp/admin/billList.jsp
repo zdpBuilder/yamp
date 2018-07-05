@@ -4,7 +4,7 @@
 <html> 
 <head>
 	<meta charset="utf-8">
-	<title>冰糕厂后台管理系统</title>
+	<title>冷食城后台管理系统</title>
 	<meta name="renderer" content="webkit">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -29,18 +29,42 @@
 	         <div class="layui-field-box">
 			    <!-- 操作按钮区域 -->
 		        <div class="my-btn-box" style="margin-bottom:-10px;">
-		            <div class="fl">
-		                <a class="layui-btn layui-btn-sm" id="btn-add-into"><i class="layui-icon"></i>进货新增</a>
-		                <a class="layui-btn layui-btn-sm" id="btn-add-out"><i class="layui-icon"></i>销售新增</a>
-		                <a class="layui-btn layui-btn-sm" id="btn-delete-all" data-type="deleteBatch"><i class="layui-icon"></i>删除</a>
-		                <a class="layui-btn layui-btn-sm" id="btn-refresh" data-type="refresh"><i class="layui-icon">&#x1002;</i>刷新</a>
+		            <div class="fl" style="margin-top:5px;" >
+		                <a  class="layui-btn layui-btn-xs" id="btn-add-into"><i class="layui-icon"></i>进货新增</a>
+		                <a class="layui-btn layui-btn-xs" id="btn-add-out"><i class="layui-icon"></i>销售新增</a>
+		                <a class="layui-btn layui-btn-xs" id="btn-delete-all" data-type="deleteBatch"><i class="layui-icon"></i>删除</a>
+		                <a class="layui-btn layui-btn-xs" id="btn-refresh" data-type="refresh"><i class="layui-icon">&#x1002;</i>刷新</a>
 		            </div>
 		            <div class="fr" >
-		                <span class="layui-form-label" style=" margin-top:5px;font-size:12px;vertical-align: top;line-height:10px;">搜索条件：</span>
+		            
+		                  <span style=" margin-right:3px;">
+								<div class="layui-input-inline">
+									<select name="intoOrOutStatus" id="intoOrOutStatus" >
+										<option value="" selected>-订单类型-</option>
+										<option value="0">进货</option>
+										<option value="1">销售</option>						
+									</select>
+								</div>	
+						</span>		
+							<span  style=" margin-right:3px;">
+								<div class="layui-input-inline">
+									<select name="lineOrderStatus" id="lineOrderStatus" >
+										<option value="" selected>-订单状态-</option>
+										<option value="0">未处理订单</option>
+										<option value="1">已处理订单</option>						
+									</select>
+								</div>	
+						</span>	
+						 <div class="layui-input-inline">
+		                    <input type="text" autocomplete="off" id="startDate" name="startDate" placeholder="开始时间" class="layui-input " style="height:26px;font-size:12px;"/>
+		                </div> -
+		                <div class="layui-input-inline">
+		                    <input type="text" autocomplete="off" id="endDate" name="endDate" placeholder="结束时间" class="layui-input " style="height:26px;font-size:12px;"/>
+		                </div>	
 		                <div class="layui-input-inline">
 		                    <input type="text" autocomplete="off" id="keywords" name="keywords" placeholder="订单编号" class="layui-input " style="height:26px;font-size:12px;"/>
 		                </div> 
-		                <button class="layui-btn layui-btn-sm" id="btn-search" style="font-size: 10px;"><i class="layui-icon" style="font-size: 14px;">&#xe615;</i>&nbsp;查询</button>
+		                <button class="layui-btn layui-btn-xs" id="btn-search" style="font-size: 10px;"><i class="layui-icon" style="font-size: 14px;">&#xe615;</i>&nbsp;查询</button>
 		            </div>
 		        </div>
 		        <!-- 表格内容区域 -->
@@ -67,13 +91,22 @@
 	}
 
 	    // layui方法
-	    layui.use(['table', 'layer'], function () {
+	    layui.use(['table', 'layer','laydate'], function () {
 			
 	        // 操作对象
 	        table = layui.table;
 	        var layer = layui.layer;
 	        var $ = layui.jquery;
+	        var laydate = layui.laydate;
 	        
+	        //日期插件加载
+	        laydate.render({ 
+	            elem: '#startDate' 
+	         });
+	        //日期插件加载
+	        laydate.render({ 
+	            elem: '#endDate' 
+	         });
 	        // 表格渲染
 	        table.render({
 			     elem: '#layTable'
@@ -82,8 +115,8 @@
 			       //{type:'numbers' ,title: '序号'},
 			       {type: 'checkbox'}
 			      ,{field: 'orderCode', title: '<span style="color:#000;font-weight:bold;">订单编号</span>',align: 'center'}
-			      ,{field: 'intoOrOutStatus', title: '<span style="color:#000;font-weight:bold;">订单状态</span>',align: 'center',templet: '#intoOrOutStatusTem'}		  
-			      ,{field: 'lineOrderStatus', title: '<span style="color:#000;font-weight:bold;">确认订单</span>',align: 'center', templet: '#checkboxTpl', event: 'setSign'}		  
+			      ,{field: 'intoOrOutStatus', title: '<span style="color:#000;font-weight:bold;">订单类型</span>',align: 'center',templet: '#intoOrOutStatusTem'}		  
+			      ,{field: 'lineOrderStatus', title: '<span style="color:#000;font-weight:bold;">订单状态</span>',align: 'center', templet: '#checkboxTpl', event: 'setSign'}		  
 			      ,{field: '', title: '<span style="color:#000;font-weight:bold;">操作</span>',align: 'center',toolbar: '#toolbar'}
 			    ]]
 	        	,url:'${pageContext.request.contextPath}/bill/list'
@@ -200,6 +233,11 @@
 	      	$("#btn-refresh").click(function(){
 	      		//清空页面刷新条件
 	      		$("#keywords").val("");
+	      		$("#lineOrderStatus").val("");
+	      		$("#intoOrOutStatus").val("");
+	      		$("#startDate").val("");
+	      		$("#endDate").val("");
+
 	      		//页面刷新
 	      		table.reload('billListTable', {
 	      		  page: {
@@ -216,7 +254,11 @@
 	      		  }
 	      		  ,where: {
 	      			//查询传参
-	      		   keywords: $("#keywords").val()
+	      		   keywords: $("#keywords").val(),
+	      		 lineOrderStatus:$("#lineOrderStatus").val(),
+	      		intoOrOutStatus:$("#intoOrOutStatus").val(),
+	      		startDate:$("#startDate").val(),
+	      		endDate	:$("#endDate").val()
 	      		  }
 	      		});
 	      	});
@@ -312,7 +354,7 @@
 	        		  ,fixed: true //位置固定
 	        		  ,maxmin: false //开启最大化最小化按钮
 	        		  ,anim: 5 //0-6的动画形式，-1不开启
-	        		  ,content: 'billInfo.jsp?id='+data.id
+	        		  ,content: 'billInfo.jsp?id='+data.id+'&intoOrOutStatus='+data.intoOrOutStatus
 	        	   });
 	      	      
 	      	    }
@@ -342,6 +384,7 @@
 <script type="text/html" id="toolbar">
 
 	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="show" style="font-size:10px;"><i class="layui-icon">&#xe615;</i>查看订单详情</a>
+	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" style="font-size:10px;"><i class="layui-icon">&#xe642;</i>编辑</a>
 	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="del" style="font-size:10px;"><i class="layui-icon">&#xe640;</i>删除</a>
 </script>
 <script type="text/html" id="checkboxTpl">

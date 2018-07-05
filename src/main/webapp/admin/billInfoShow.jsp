@@ -49,10 +49,33 @@ dd {
 
 	<form class="layui-form" action="">	
 		<fieldset class="layui-elem-field">
-			<legend>基本信息</legend>	
-					<div class="layui-form-item" style="margin-bottom: 3px;">
-						
-					</div>	
+			<c:if test="<%=intoOrOutStatus.equals(\"0\")%>">
+			 <legend>进货基本信息</legend>			
+			</c:if>	
+			<c:if test="<%=intoOrOutStatus.equals(\"1\")%>">
+			 <legend>销售基本信息</legend>			
+			</c:if>		
+			<c:if test="<%=intoOrOutStatus.equals(\"1\")%>">
+			<div class="layui-form-item" style="margin-bottom:3px;">
+			<label class="layui-form-label"
+							style="font-size: 12px; line-height: 10px;">送货地址</label>
+						<div class="layui-input-inline">
+							<input type="text"  name="address" disabled id="address" 
+								placeholder="" autocomplete="off"
+								class="layui-input layui-form-danger"
+								style="height: 26px; font-size: 12px;">
+						</div>
+						 <label class="layui-form-label" style="font-size:12px;line-height:10px;">管理员角色</label>
+	         <div class="layui-input-inline">
+	           <select name="lineOrderStatus" disabled id="lineOrderStatus" lay-verify="required">
+	            <option value="" selected >请选择</option>
+	            <option value="0"  >未处理订单</option>
+	            <option value="1">已处理订单</option>
+	           </select>
+	        </div>
+			</div>	
+				
+			</c:if>	
 					<div class="layui-form-item" style="margin-bottom:3px;">
 					<label class="layui-form-label"
 							style="font-size: 12px; line-height: 10px;">订单编号</label>
@@ -129,10 +152,13 @@ dd {
   			success:function(result){
   				result = result.data;
   				if(result){	
+  					$("#address").val(result.address);
+  					$("#lineOrderStatus").val(result.lineOrderStatus);
   					$("#orderCode").val(result.orderCode);
   					$("#transaction").val(result.transaction);
   					$("#player").val(result.player);
   					goodsData=JSON.parse(result.goodsIds);
+  					renderForm();
   	     	    	table.reload('goodsListTable',{data:goodsData});					
   				}
   			}

@@ -81,7 +81,7 @@ public class GoodsController extends UploadController {
  		SysUser currentLoginUser = (SysUser) session.getAttribute("CurrentLoginUserInfo");
  		// 编辑商品
  		if (null != goods.getId()&& goods.getId() > 0) {		
- 			goods.setUpdater(currentLoginUser.getName() + "");
+ 			goods.setUpdater(currentLoginUser.getLoginId() + "");
  			goods.setUpdateTime(DateUtil.DateToString(new Date(), "yyyy-MM-dd "));
  			count = goodsMapper.updateByPrimaryKeySelective(goods);
 
@@ -89,7 +89,7 @@ public class GoodsController extends UploadController {
  		} else {
  			// 新增商品
  			goods.setStatus(1);
- 			goods.setCreater(currentLoginUser.getName()+ "");
+ 			goods.setCreater(currentLoginUser.getLoginId()+ "");
  			goods.setCreateTime(DateUtil.DateToString(new Date(), "yyyy-MM-dd "));
  			count = goodsMapper.insertSelective(goods);
  			//输出前台Json
@@ -112,7 +112,7 @@ public class GoodsController extends UploadController {
  				Goods goods = goodsMapper.selectByPrimaryKey(id);
  				goods.setStatus(0);//  0已删除
  				goods.setUpdateTime(DateUtil.DateToString(new Date(), "yyyy-MM-dd "));
- 				goods.setUpdater(currentLoginUser.getName() + "");
+ 				goods.setUpdater(currentLoginUser.getLoginId() + "");
  				goodsMapper.updateByPrimaryKeySelective(goods);
  			}
  			// 输出前台Json
@@ -123,7 +123,7 @@ public class GoodsController extends UploadController {
  	}
 
  	// 商品查看
- 	@RequestMapping(value = "show", method = RequestMethod.POST)
+ 	@RequestMapping("show")
  	@ResponseBody
  	public void showWH(int id, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
  		Goods goods= goodsMapper.selectByPrimaryKey(id);

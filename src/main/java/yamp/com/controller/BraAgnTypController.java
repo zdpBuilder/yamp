@@ -83,14 +83,14 @@ public class BraAgnTypController {
 		// 编辑品牌||种类||供应商||
 		if (null != braAgnTyp.getId()&& braAgnTyp.getId() > 0) {
 			braAgnTyp.setId(id);
-			braAgnTyp.setUpdater(currentLoginUser.getName() + "");
+			braAgnTyp.setUpdater(currentLoginUser.getLoginId() + "");
 			braAgnTyp.setUpdateTime(DateUtil.DateToString(new Date(), "yyyy-MM-dd "));
 			count = braAgnTypMapper.updateByPrimaryKeySelective(braAgnTyp);
 
 			
 		} else {
 			// 新增品牌||种类||供应商||
-			braAgnTyp.setCreater(currentLoginUser.getName()+ "");
+			braAgnTyp.setCreater(currentLoginUser.getLoginId()+ "");
 			braAgnTyp.setCreateTime(DateUtil.DateToString(new Date(), "yyyy-MM-dd "));
 			count = braAgnTypMapper.insert(braAgnTyp);
 			//输出前台Json
@@ -113,7 +113,7 @@ public class BraAgnTypController {
 				BraAgnTyp braAgnTyp = braAgnTypMapper.selectByPrimaryKey(id);
 				braAgnTyp.setStatus(0);//  0已删除
 				braAgnTyp.setUpdateTime(DateUtil.DateToString(new Date(), "yyyy-MM-dd "));
-				braAgnTyp.setUpdater(currentLoginUser.getName() + "");
+				braAgnTyp.setUpdater(currentLoginUser.getLoginId() + "");
 				braAgnTypMapper.updateByPrimaryKeySelective(braAgnTyp);
 			}
 			// 输出前台Json

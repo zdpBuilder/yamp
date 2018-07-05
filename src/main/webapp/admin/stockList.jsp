@@ -4,7 +4,7 @@
 <html> 
 <head>
 	<meta charset="utf-8">
-	<title>冰糕厂后台管理系统</title>
+	<title>冷食城后台管理系统</title>
 	<meta name="renderer" content="webkit">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -83,8 +83,8 @@
 			      ,{field: 'boxBidPrice', title: '<span style="color:#000;font-weight:bold;">商品箱进价</span>',align: 'center'}
 			      ,{field: 'branchPrice', title: '<span style="color:#000;font-weight:bold;">商品支单价</span>',align: 'center'}
 			      ,{field: 'boxPrice', title: '<span style="color:#000;font-weight:bold;">商品箱单价</span>',align: 'center'}		  
-			      ,{field: 'branchCount', title: '<span style="color:#000;font-weight:bold;">商品支数量</span>',align: 'center'}		  
-			      ,{field: 'boxCount', title: '<span style="color:#000;font-weight:bold;">商品箱数量</span>',align: 'center'}		  
+			      ,{field: 'branchCount', title: '<span style="color:#000;font-weight:bold;">商品支数量</span>',align: 'center',templet:'#branchCountTpl'}		  
+			      ,{field: 'boxCount', title: '<span style="color:#000;font-weight:bold;">商品箱数量</span>',align: 'center',templet:'#boxCountTpl'}		  
 			      ]]
 	        	,url:'${pageContext.request.contextPath}/goods/list'
 	        	,id: 'goodsListTable'
@@ -92,7 +92,7 @@
 	        		keywords: $("#keywords").val()
 	        	}//查询传参
 			    //,skin: 'line' //表格风格
-			    ,even: true  //隔行换色
+			    ,even: false  //隔行换色
 			    ,size: 'sm' //小尺寸的表格
 			    ,page: true  //开启分页
 			    ,done: function(res, curr, count){
@@ -141,3 +141,17 @@
 	</script>
 </body>
 </html>
+<script type="text/html" id="branchCountTpl">
+  {{#  if(d.branchCount <=5){ }}
+    <span style="color: red;">{{ d.branchCount }}</span>
+  {{#  } else { }}
+    {{ d.branchCount }}
+  {{#  } }}
+</script>
+<script type="text/html" id="boxCountTpl">
+  {{#  if(d.boxCount <=5){ }}
+    <span style="color: red;">{{ d.boxCount }}</span>
+  {{#  } else { }}
+    {{ d.boxCount}}
+  {{#  } }}
+</script>

@@ -8,7 +8,7 @@ SysUser currentLoginUser = (SysUser) session.getAttribute("CurrentLoginUserInfo"
 
 	<head>
 		<meta charset="utf-8">
-		<title>冰糕厂后台管理</title>
+		<title>冷食城后台管理</title>
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -85,7 +85,7 @@ SysUser currentLoginUser = (SysUser) session.getAttribute("CurrentLoginUserInfo"
 			<div class="layui-footer footer footer-demo" id="admin-footer">
 				<div class="layui-main">
 					<p>2018 &copy;
-						<a href="">ITF4</a> LGPL license
+						<a href=""> @CopyRight YAMP </a> 
 					</p>
 				</div>
 			</div>

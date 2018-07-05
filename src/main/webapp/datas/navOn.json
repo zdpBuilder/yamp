@@ -9,6 +9,11 @@
         "icon": "fa fa-user-circle-o",
         "href": "admin/usersList.jsp",
         "spread": false
+      }, {
+        "title": "客户管理",
+        "icon": "fa fa-user-circle-o",
+        "href": "admin/CustomerList.jsp",
+        "spread": false
       }
       ]
   },{

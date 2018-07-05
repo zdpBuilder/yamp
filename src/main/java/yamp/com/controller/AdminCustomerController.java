@@ -19,36 +19,36 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import yamp.com.common.ResponseJsonPageListBean;
-import yamp.com.mapper.SysUserMapper;
+import yamp.com.mapper.CustomerMapper;
+import yamp.com.model.Customer;
+import yamp.com.model.CustomerExample;
 import yamp.com.model.SysUser;
-import yamp.com.model.SysUserExample;
-import yamp.com.model.SysUserExample.Criteria;
-import yamp.com.service.UsersService;
-import yamp.com.util.Const;
 import yamp.com.util.DateUtil;
 import yamp.com.util.JsonPrintUtil;
 
 
+
+
 @Controller
-@RequestMapping("/user")
-public class UsersController {
+@RequestMapping("/adminCustomer")
+public class AdminCustomerController {
 	@Autowired
-	private  SysUserMapper sysUserMapper;
+	private  CustomerMapper customerMapper;
 	
 
-	  // 用户列表分页查询
+	  // 客户列表分页查询
 	 	@RequestMapping("list")
 	 	@ResponseBody
 	 	public void equipmentList(HttpServletRequest request, HttpServletResponse response, String keywords, int limit,
 	 			int page) {
 	 		// limit 每页显示数量
 	 		// page 当前页码
-	 		SysUserExample example = new SysUserExample();
+	 		CustomerExample example = new CustomerExample();
 	 		// 设置分页查询参数
 	 		example.setStartRow((page - 1) * limit);
 	 		example.setPageSize(limit);
 	 		example.setOrderByClause("create_time desc,update_time desc");
-	 		Criteria criteria = example.createCriteria();
+	 		CustomerExample.Criteria criteria = example.createCriteria();
 	 		if (keywords!=null&&keywords!="") {
 	 			keywords = keywords.trim();
 	 			keywords = "%" + keywords + "%";
@@ -59,53 +59,53 @@ public class UsersController {
 	 			criteria.andStatusNotEqualTo(0);// 正常状态
 	 		}
 	 		// 分页查询
-	 		List<SysUser> sysUsers = sysUserMapper.selectByExample(example);
-	 		int count = (int) sysUserMapper.countByExample(example);
+	 		List<Customer> customers = customerMapper.selectByExample(example);
+	 		int count = (int) customerMapper.countByExample(example);
 
 	 		ResponseJsonPageListBean listBean = new ResponseJsonPageListBean();
 	 		listBean.setCode(0);
 	 		listBean.setCount(count);
-	 		listBean.setMsg("用户列表");
-	 		listBean.setData(sysUsers);
+	 		listBean.setMsg("客户列表");
+	 		listBean.setData(customers);
 
 	 		// 日志记录及输出前台Json
-	 		if (null != sysUsers && sysUsers.size() > 0) {
+	 		if (null != customers && customers.size() > 0) {
 	 			JsonPrintUtil.printObjDataWithoutKey(response, listBean);
 	 		} else {
 	 			JsonPrintUtil.printObjDataWithoutKey(response, null);
 	 		}
 	 	}
 	 	
-	 // 用户新增 编辑
+	 // 客户新增 编辑
 	 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	 	@ResponseBody
-	 	public void save(SysUser sysUser, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	 	public void save(Customer customer, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 	 		int count = 0;
 	 		SysUser currentLoginUser = (SysUser) session.getAttribute("CurrentLoginUserInfo");
-	 		// 编辑用户
-	 		if (null != sysUser.getId()&& sysUser.getId() > 0) {
-	 			SysUser userOld = sysUserMapper.selectByPrimaryKey(sysUser.getId());
-	 			sysUser.setUpdater(currentLoginUser.getLoginId() + "");
-	 			sysUser.setUpdateTime(DateUtil.DateToString(new Date(), "yyyy-MM-dd "));
-	 			if (!userOld.getLoginPassword().equals(sysUser.getLoginPassword())) {
-	 				sysUser.setLoginPassword(DigestUtils.md5DigestAsHex(sysUser.getLoginPassword().getBytes()));
+	 		// 编辑客户
+	 		if (null != customer.getId()&& customer.getId() > 0) {
+	 			Customer customerOld = customerMapper.selectByPrimaryKey(customer.getId());
+	 			customer.setUpdater(currentLoginUser.getLoginId() + "");
+	 			customer.setUpdateTime(DateUtil.DateToString(new Date(), "yyyy-MM-dd "));
+	 			if (!customerOld.getLoginPassword().equals(customer.getLoginPassword())) {
+	 				customer.setLoginPassword(DigestUtils.md5DigestAsHex(customer.getLoginPassword().getBytes()));
 	 			}
-	 			count = sysUserMapper.updateByPrimaryKeySelective(sysUser);
+	 			count = customerMapper.updateByPrimaryKeySelective(customer);
 
 	 			
 	 		} else {
-	 			// 新增用户
-	 			sysUser.setCreater(currentLoginUser.getLoginId() + "");
-	 			sysUser.setCreateTime(DateUtil.DateToString(new Date(), "yyyy-MM-dd "));
-	 			sysUser.setLoginPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
-	 			count = sysUserMapper.insert(sysUser);
+	 			// 新增客户
+	 			customer.setCreater(currentLoginUser.getLoginId());
+	 			customer.setCreateTime(DateUtil.DateToString(new Date(), "yyyy-MM-dd "));
+	 			customer.setLoginPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+	 			count = customerMapper.insert(customer);
 	 			//输出前台Json
 	 			
 	 		} 		
  				JsonPrintUtil.printObjDataWithKey(response, count, "data");		
 	 	}
 
-	 	// 用户批量删除
+	 	// 客户批量删除
 	 	@RequestMapping(value = "deleteBatch", method = RequestMethod.POST)
 	 	@ResponseBody
 	 	public void deleteBatch(String idStr, HttpServletRequest request, HttpServletResponse response,
@@ -116,11 +116,11 @@ public class UsersController {
 	 			for (int i = 0; i < idArr.length; i++) {
 	 				// 更新所选设备分类为删除状态
 	 				int id = Integer.parseInt(idArr[i]);
-	 				SysUser user = sysUserMapper.selectByPrimaryKey(id);
-	 				user.setStatus(0);// 1正常 0已删除
-	 				user.setUpdateTime(DateUtil.DateToString(new Date(), "yyyy-MM-dd "));
-	 				user.setUpdater(currentLoginUser.getLoginId() + "");
-	 				sysUserMapper.updateByPrimaryKeySelective(user);
+	 				Customer customer= customerMapper.selectByPrimaryKey(id);
+	 				customer.setStatus(0);// 1正常 0已删除
+	 				customer.setUpdateTime(DateUtil.DateToString(new Date(), "yyyy-MM-dd "));
+	 				customer.setUpdater(currentLoginUser.getLoginId() + "");
+	 				customerMapper.updateByPrimaryKeySelective(customer);
 	 			}
 	 			// 输出前台Json
 	 			JsonPrintUtil.printObjDataWithKey(response, 1, "data");
@@ -129,13 +129,13 @@ public class UsersController {
 	 		}
 	 	}
 
-	 	// 用户查看
+	 	// 客户查看
 	 	@RequestMapping(value = "show", method = RequestMethod.POST)
 	 	@ResponseBody
 	 	public void showWH(int id, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-	 		SysUser user = sysUserMapper.selectByPrimaryKey(id);
-	 		if (null != user) {		
-	 			JsonPrintUtil.printObjDataWithKey(response, user, "data");
+	 		Customer customer = customerMapper.selectByPrimaryKey(id);
+	 		if (null != customer) {		
+	 			JsonPrintUtil.printObjDataWithKey(response, customer, "data");
 	 		} else {
 	 			JsonPrintUtil.printObjDataWithKey(response, null, "data");
 	 		}
@@ -144,10 +144,10 @@ public class UsersController {
 	 	@RequestMapping(value = "loginIdCheck", method = RequestMethod.POST)
 	 	@ResponseBody
 	 	public boolean loginIdCheck(String loginId, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-	 		SysUserExample example=  new SysUserExample();
-	 		SysUserExample.Criteria criteria = example.createCriteria();
+	 		CustomerExample example=  new CustomerExample();
+	 		CustomerExample.Criteria criteria = example.createCriteria();
 	 		criteria.andLoginIdEqualTo(loginId);
-	 		List<SysUser> list =sysUserMapper.selectByExample(example);
+	 		List<Customer> list =customerMapper.selectByExample(example);
 	 		if(list.size()>0&&list!=null) {
 	 			return false;
 	 		}

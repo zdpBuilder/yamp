@@ -4,7 +4,7 @@
 <html> 
 <head>
 	<meta charset="utf-8">
-	<title>冰糕厂后台管理系统</title>
+	<title>冷食城后台管理系统</title>
 	<meta name="renderer" content="webkit">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -30,15 +30,15 @@
 			    <!-- 操作按钮区域 -->
 		        <div class="my-btn-box" style="margin-bottom:-10px;">
 		            <div class="fl">
-		       
-		                <a class="layui-btn layui-btn-sm" id="btn-add-out"><i class="layui-icon"></i>销售新增</a>
-
+		                <a class="layui-btn layui-btn-sm" id="btn-add"><i class="layui-icon"></i>新增</a>
+<!-- 		                <a class="layui-btn layui-btn-sm" id="btn-add-batch"><i class="layui-icon"></i>批量新增</a>
+ -->		                <a class="layui-btn layui-btn-sm" id="btn-delete-all" data-type="deleteBatch"><i class="layui-icon"></i>删除</a>
 		                <a class="layui-btn layui-btn-sm" id="btn-refresh" data-type="refresh"><i class="layui-icon">&#x1002;</i>刷新</a>
 		            </div>
 		            <div class="fr" >
 		                <span class="layui-form-label" style=" margin-top:5px;font-size:12px;vertical-align: top;line-height:10px;">搜索条件：</span>
 		                <div class="layui-input-inline">
-		                    <input type="text" autocomplete="off" id="keywords" name="keywords" placeholder="订单编号" class="layui-input " style="height:26px;font-size:12px;"/>
+		                    <input type="text" autocomplete="off" id="keywords" name="keywords" placeholder="账号、姓名" class="layui-input " style="height:26px;font-size:12px;"/>
 		                </div> 
 		                <button class="layui-btn layui-btn-sm" id="btn-search" style="font-size: 10px;"><i class="layui-icon" style="font-size: 14px;">&#xe615;</i>&nbsp;查询</button>
 		            </div>
@@ -59,7 +59,7 @@
 
 	function reloadTable(pageNum){
 		//刷新表格内容
-		table.reload('billListTable', {
+		table.reload('custmerListTable', {
 		  page: {
 		    curr: pageNum //当前页开始
 		  } 
@@ -81,16 +81,22 @@
 			    ,cols: [[ 
 			       //{type:'numbers' ,title: '序号'},
 			       {type: 'checkbox'}
-			      ,{field: 'orderCode', title: '<span style="color:#000;font-weight:bold;">订单编号</span>',align: 'center'}
-			      ,{field: 'intoOrOutStatus', title: '<span style="color:#000;font-weight:bold;">订单状态</span>',align: 'center',templet: '#intoOrOutStatusTem'}		  
-			      ,{field: '', title: '<span style="color:#000;font-weight:bold;">操作</span>',align: 'center',toolbar: '#toolbar'}
+				  ,{field: 'loginId', title: '<span style="color:#000;font-weight:bold;">账号</span>',align: 'center'}
+			      ,{field: 'name', title: '<span style="color:#000;font-weight:bold;">姓名</span>',align: 'center'}
+			      ,{field: 'phone', title: '<span style="color:#000;font-weight:bold;">电话</span>',align: 'center'}
+			      ,{field: 'address', title: '<span style="color:#000;font-weight:bold;">地址</span>',align: 'center'}
+			      ,{field: 'status', title: '<span style="color:#000;font-weight:bold;">客户类型</span>',align: 'center',templet: '#customerStatus'}
+			      ,{field: 'creater', title: '<span style="color:#000;font-weight:bold;">创建者</span>',align: 'center'}
+			      ,{field: 'createTime', title: '<span style="color:#000;font-weight:bold;">创建时间</span>',align: 'center'}
+			      ,{field: 'updater', title: '<span style="color:#000;font-weight:bold;">更新者</span>',align: 'center'}
+			      ,{field: 'updateTime', title: '<span style="color:#000;font-weight:bold;">更新时间</span>',align: 'center'}
+			      ,{field: '', title: '<span style="color:#000;font-weight:bold;">操作</span>',align: 'center',toolbar: '#toolbar',width:200}
 			    ]]
-	        	,url:'${pageContext.request.contextPath}/bill/list'
-	        	,id: 'billListTable'
+	        	,url:'${pageContext.request.contextPath}/adminCustomer/list'
+	        	,id: 'custmerListTable'
 	        	,where: {
-	        		keywords: $("#keywords").val(),
-	        		intoOrOutStatus:1,
-	        		lineOrderStatus:1
+	        		keywords: $("#keywords").val()
+	        		
 	        	}//查询传参
 			    //,skin: 'line' //表格风格
 			    ,even: true  //隔行换色
@@ -119,58 +125,47 @@
 	          }  */
 	        });
 	      	
-	      	//进货添加 
-	      	$("#btn-add-into").click(function(){
+	      	//添加 
+	      	$("#btn-add").click(function(){
 	      		layer.open({
 	      		  type: 2 //Page层类型
-	      		  ,area: ['100%', '100%']
-	      		  ,title:  ['新增信息', '']
+	      		  ,area: ['388px', '388px']
+	      		  ,title:  ['新增客户信息', '']
 	      		  ,shade: 0.6 //遮罩透明度
 	      		  ,fixed: true //位置固定
 	      		  ,maxmin: false //开启最大化最小化按钮
 	      		  ,anim: 5 //0-6的动画形式，-1不开启
-	      		  ,content: 'billInfo.jsp?intoOrOutStatus=0'
+	      		  ,content: 'addCustomer.jsp'
 	      	   });
 	      	});
-	      //销售添加 
-	      	$("#btn-add-out").click(function(){
-	      		layer.open({
-	      		  type: 2 //Page层类型
-	      		  ,area: ['100%', '100%']
-	      		  ,title:  ['新增信息', '']
-	      		  ,shade: 0.6 //遮罩透明度
-	      		  ,fixed: true //位置固定
-	      		  ,maxmin: false //开启最大化最小化按钮
-	      		  ,anim: 5 //0-6的动画形式，-1不开启
-	      		  ,content: 'billInfo.jsp?intoOrOutStatus=1'
-	      	   });
-	      	});
+	      
+	 
 	      	//批量删除
 			$("#btn-delete-all").click(function(){
 				
-				var checkStatus = table.checkStatus('billListTable')
+				var checkStatus = table.checkStatus('custmerListTable')
 			    var data = checkStatus.data;//选中数据
 			    
 			    if(data.length>0){
 			    	var idStr = "";
-			    	for(var i=0;i<data.length;i++){	
+			    	for(var i=0;i<data.length;i++){  		
 			    		idStr = data[i].id + "," + idStr;
 			    	}
-			    	layer.confirm('确认删除 '+data.length+' 条用户信息？', {
+			    	layer.confirm('确认删除 '+data.length+' 条客户信息？', {
 		      	    	  title: "确认消息", //标题
 		      	    	  btn: ['确认','取消'] //按钮
 		      	    	}, function(){
 		      	    		//单条删除
 		      	    		$.ajax({
 		        	  			method: "post",
-		        	  			url:"${pageContext.request.contextPath}/bill/deleteBatch",
+		        	  			url:"${pageContext.request.contextPath}/adminCustomer/deleteBatch",
 		        	  			data:{"idStr":idStr},
 		        	  			success:function(result){
 		        	  				if(result.data==1){
 		        		  				layer.msg('删除 '+data.length+' 条成功！', {time: 1000}); //1s后自动关闭
 		      	    					
 		        		  				//刷新表格内容
-		        		  		        table.reload('billListTable', {
+		        		  		        table.reload('custmerListTable', {
 		        		  		          page: {
 		        		  		            curr: currPageNum //从当前页开始
 		        		  		          }
@@ -202,7 +197,7 @@
 	      		//清空页面刷新条件
 	      		$("#keywords").val("");
 	      		//页面刷新
-	      		table.reload('billListTable', {
+	      		table.reload('custmerListTable', {
 	      		  page: {
 	      		    curr: 1 //重新从第 1 页开始
 	      		  }
@@ -211,7 +206,7 @@
 	      	//多条件查询
 	      	$("#btn-search").click(function(){
 	      		//表格查询
-	      		table.reload('billListTable', {
+	      		table.reload('custmerListTable', {
 	      		  page: {
 	      		    curr: 1 //重新从第 1 页开始
 	      		  }
@@ -225,52 +220,97 @@
 	      	//toolBar操作列监听
 	      	 table.on('tool(tableFilter)', function(obj){
 	      		var data = obj.data;
-          	
-	      		if(obj.event === 'show'){
-		      	      //编辑操作
-		      	  	  //layer.msg('ID：'+ data.id + ' 的编辑操作');
-		      	      layer.open({
-		        		  type: 2 //Page层类型
-		        		  ,area: ['100%', '100%']
-		        		  ,title: ['查看信息', '']
-		        		  ,shade: 0.6 //遮罩透明度
-		        		  ,fixed: true //位置固定
-		        		  ,maxmin: false //开启最大化最小化按钮
-		        		  ,anim: 5 //0-6的动画形式，-1不开启
-		        		  ,content: 'billInfoShow.jsp?id='+data.id+'&intoOrOutStatus='+data.intoOrOutStatus
-		        	   });
-		      	      
-		      	    }
-	      
+	      		
+	      	    if(obj.event === 'del'){
+	 	
+	      	      //layer.msg('ID：'+ data.id + ' 的删除操作');
+	      	    	layer.confirm('确认删除客户信息？', {
+	      	    	  title: "确认消息", //标题
+	      	    	  btnAlign: 'c',
+	      	    	  btn: ['确认','取消'] //按钮
+	      	    	}, function(){
+	      	    		//单条删除
+	      	    		$.ajax({
+	        	  			method: "post",
+	        	  			url:"${pageContext.request.contextPath}/adminCustomer/deleteBatch",
+	        	  			data:{"idStr":data.id},
+	        	  			success:function(result){
+	        	  				if(result.data==1){
+	        		  				layer.msg('删除成功！', {time: 1000}); //1s后自动关闭
+	      	    					//console.info(obj);
+	        		  				//$(obj.tr).fadeOut();
+	        		  				//刷新表格内容
+	        		  		        table.reload('custmerListTable', {
+	        		  		          page: {
+	        		  		            curr: currPageNum //从当前页开始
+	        		  		          }
+	        		  		          ,where: {
+	        		  		        	//传参
+	        		  		            keywords: $("#keywords").val()
+	        		  		          }
+	        		  		        });
+	        		  				
+	        	  				}else{
+	        	  					layer.msg('删除失败！', {time: 1000}); //1s后自动关闭
+	        	  				}
+	        	  	        }
+	        			});
+	      	    	   
+	      	    	}, function(){
+	      	    	  //取消
+	      	    	});
+	      	      
+	      	    }
+	      	  	if(obj.event === 'edit'){
+	      	      //编辑操作
+	      	  	  //layer.msg('ID：'+ data.id + ' 的编辑操作');
+	      	      layer.open({
+	        		  type: 2 //Page层类型
+	        		  ,area: ['388px', '388px']
+	        		  ,title: ['编辑客户信息', '']
+	        		  ,shade: 0.6 //遮罩透明度
+	        		  ,fixed: true //位置固定
+	        		  ,maxmin: false //开启最大化最小化按钮
+	        		  ,anim: 5 //0-6的动画形式，-1不开启
+	        		  ,content: 'editCustomer.jsp?id='+data.id
+	        	   });
+	      	      
+	      	    }
+	      	  	
+	      	  if(obj.event === 'show'){
+	      		//修改密码
+	      	  	//layer.msg('ID：'+ data.id + ' 的编辑操作');
+		      	layer.open({
+	    		  type: 2 //Page层类型
+	    		  ,area: ['390px', '233px']
+	    		  ,title: ['重置密码', '']
+	    		  ,shade: 0.6 //遮罩透明度
+	    		  ,fixed: true //位置固定
+	    		  ,maxmin: false //开启最大化最小化按钮
+	    		  ,anim: 5 //0-6的动画形式，-1不开启
+	    		  ,content: 'eidtCustomerPassword.jsp?id='+data.id
+		    	 });
+	      		  
+	      	  }
 	      	 });
 	      	
 	    });
 	</script>
 	<!-- 操作列  -->
-<!-- 		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" style="font-size:10px;"><i class="layui-icon">&#xe642;</i>编辑</a>
- -->	
 <script type="text/html" id="toolbar">
-
-	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="show" style="font-size:10px;"><i class="layui-icon">&#xe615;</i>查看订单详情</a>
+	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="show" style="font-size:10px;"><i class="layui-icon">&#xe857;</i>改密</a>
+	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" style="font-size:10px;"><i class="layui-icon">&#xe642;</i>编辑</a>
+	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="del" style="font-size:10px;"><i class="layui-icon">&#xe640;</i>删除</a>
 </script>
-<script type="text/html" id="checkboxTpl">
-		{{#  if( d.lineOrderStatus=== 0){ }}
-              <input type="checkbox"  value="0"  id="lineOrderStatus" name="lineOrderStatus"  lay-skin="switch" lay-text="是|否">
+
+<script type="text/html" id="customerStatus">
+		{{#  if( d.status=== 1){ }} 
+        个人
         {{#  } }} 
         
-        {{#  if( d.lineOrderStatus=== 1){ }}
-              <input type="checkbox"  value="1"  checked="checked" id="lineOrderStatus"  name="lineOrderStatus" lay-skin="switch" lay-text="是|否">
+        {{#  if( d.status=== 2){ }}
+       商家
         {{#  } }} 
 	</script>
-	<script type="text/html" id="intoOrOutStatusTem">
-		{{#  if( d.intoOrOutStatus=== 0){ }} 
-        进货
-        {{#  } }} 
-        
-        {{#  if( d.intoOrOutStatus=== 1){ }}
-       销售
-        {{#  } }} 
-	</script>
-	
 </body>
 </html>

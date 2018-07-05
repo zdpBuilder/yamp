@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +39,7 @@ public class BillController {
 	// 账单列表分页查询
 	@RequestMapping("list")
 	@ResponseBody
-	public void getList(HttpServletRequest request, HttpServletResponse response, Integer intoOrOutStatus,String keywords, int limit,
+	public void getList(HttpServletRequest request, HttpServletResponse response, String intoOrOutStatus,String lineOrderStatus,String startDate,String endDate,String keywords, int limit,
 			int page) {
 		// limit 每页显示数量
 		// page 当前页码
@@ -49,7 +49,37 @@ public class BillController {
 		example.setPageSize(limit);
 		example.setOrderByClause("player_time desc");
 		BillExample.Criteria criteria = example.createCriteria();
-		if(intoOrOutStatus!=null) {
+		BillExample.Criteria criteria2 = example.createCriteria();
+		if (StringUtils.isNotBlank(intoOrOutStatus)) {
+			criteria.andIntoOrOutStatusEqualTo(Integer.parseInt(intoOrOutStatus));
+			criteria2.andIntoOrOutStatusEqualTo(Integer.parseInt(intoOrOutStatus));
+		}
+		if (StringUtils.isNotBlank(startDate)) {
+			criteria.andCreateTimeGreaterThan(startDate);
+			criteria2.andCreateTimeGreaterThan(startDate);
+		}
+		if (StringUtils.isNotBlank(endDate)) {
+			criteria.andCreateTimeLessThan(endDate);
+			criteria2.andCreateTimeGreaterThan(startDate);
+		}
+		 if (StringUtils.isNotBlank(lineOrderStatus)) {
+				criteria.andLineOrderStatusEqualTo(Integer.parseInt(lineOrderStatus));
+				criteria2.andLineOrderStatusEqualTo(Integer.parseInt(lineOrderStatus));
+		}
+		 
+		if (StringUtils.isNotBlank(keywords)) {
+			keywords = keywords.trim();
+			keywords = "%" + keywords + "%";
+			// and or联合查询
+			criteria.andOrderCodeLike(keywords);
+			criteria2.andOrderCodeLike(keywords);
+			example.or(criteria2);
+		}
+		
+		criteria.andStatusEqualTo(1);
+		criteria2.andStatusEqualTo(1);
+		
+		/*if(intoOrOutStatus!=null) {
 			if (keywords != null && keywords != "") {
 				keywords = keywords.trim();
 				keywords = "%" + keywords + "%";
@@ -68,7 +98,7 @@ public class BillController {
 				criteria.andStatusEqualTo(1);// 正常状态
 			}
 		}
-		
+		*/
 		// 分页查询
 		List<Bill> billList = billMapper.selectByExample(example);
 		int count = (int) billMapper.countByExample(example);
@@ -128,7 +158,7 @@ public class BillController {
 			// 新增账单
 			bill.setStatus(1);
 			bill.setLineOrderStatus(1);
-			bill.setCreater(currentLoginUser.getName() + "");
+			bill.setCreater(currentLoginUser.getLoginId());
 			bill.setCreateTime(DateUtil.DateToString(new Date(), "yyyy-MM-dd "));
 			count = billMapper.insert(bill);
 			// 输出前台Json
@@ -174,7 +204,7 @@ public class BillController {
 	}
 
 	// 收入/支出统计
-	@RequestMapping(value = "intoOutCount", method = RequestMethod.POST)
+	@RequestMapping("intoOutCount")
 	@ResponseBody
 	public void intoOutCount(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		IntoOutCountPojo intoOutCountPojo = new IntoOutCountPojo();
