@@ -258,6 +258,7 @@ dd {
                });        
            }else{
                parent.layer.msg('请添加商品！', {time: 1500}); //1s后自动关闭);   
+              return;
            }
            
         });

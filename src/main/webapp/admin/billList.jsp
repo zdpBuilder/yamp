@@ -281,7 +281,7 @@
         	  			   console.info(data);
 		      	    		$.ajax({
 		        	  			method: "post",
-		        	  			url:"${pageContext.request.contextPath}/bill/save",
+		        	  			url:"${pageContext.request.contextPath}/bill/BillSign",
 		        	  			data:data,
 		        	  			success:function(result){    	
 		        	  				if(result.data==1){

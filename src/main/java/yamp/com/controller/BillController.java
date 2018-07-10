@@ -165,7 +165,15 @@ public class BillController {
 		}
 		JsonPrintUtil.printObjDataWithKey(response, count, "data");
 	}
-
+    //确认账单
+	@RequestMapping("BillSign")
+	@ResponseBody
+	public void BillSign(Bill bill, HttpServletRequest request, HttpServletResponse response,
+			HttpSession session) {
+		int count=billMapper.updateByPrimaryKeySelective(bill);
+		
+		JsonPrintUtil.printObjDataWithKey(response, count, "data");
+	}
 	// 账单批量删除
 	@RequestMapping(value = "deleteBatch", method = RequestMethod.POST)
 	@ResponseBody
