@@ -359,8 +359,7 @@
 	      	      
 	      	    }
 	      		if(obj.event === 'show'){
-		      	      //编辑操作
-		      	  	  //layer.msg('ID：'+ data.id + ' 的编辑操作');
+  
 		      	      layer.open({
 		        		  type: 2 //Page层类型
 		        		  ,area: ['100%', '100%']

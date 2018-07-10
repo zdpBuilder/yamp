@@ -73,7 +73,7 @@ dd {
 								class="layui-input layui-form-danger"
 								style="height: 26px; font-size: 12px;">
 						</div>
-						 <label class="layui-form-label" style="font-size:12px;line-height:10px;">管理员角色</label>
+						 <label class="layui-form-label" style="font-size:12px;line-height:10px;">订单状态</label>
 	         <div class="layui-input-inline">
 	           <select name="lineOrderStatus" id="lineOrderStatus" lay-verify="required">
 	            <option value="" selected >请选择</option>
@@ -162,9 +162,15 @@ dd {
 	    	if(isUsed){
 	    		goodsData.push(goodsAddData);
 	    		if(<%=intoOrOutStatus%>==0){
+	    			
 	 		    transaction=transaction+goodsAddData.branchBidPrice*goodsAddData.branchCount+goodsAddData.boxBidPrice*goodsAddData.boxCount;			
 	    		}else{
-	 		       transaction=transaction+goodsAddData.branchPrice*goodsAddData.branchCount+goodsAddData.boxPrice*goodsAddData.boxCount;			
+	    			if(goodsAddData.branchCount>8||goodsAddData.boxCount>8){
+	 	 		       transaction=transaction+(goodsAddData.branchPrice*goodsAddData.branchCount+goodsAddData.boxPrice*goodsAddData.boxCount)*0.8;			
+	 	 		       
+	    			}else{
+	 	 		       transaction=transaction+goodsAddData.branchPrice*goodsAddData.branchCount+goodsAddData.boxPrice*goodsAddData.boxCount;				
+	    			}
 	    		}
 	    	}
 	    	
@@ -415,10 +421,13 @@ dd {
      	    	 obj.del();
      	    	 for(var i=0;i<goodsData.length;i++){
      	    		if(goodsData[i].id==data.id){
-     	    			goodsData.splice(i);
+     	    			goodsData.splice(i,1);
      	    			if(<%=intoOrOutStatus%>==0){
                             transaction=transaction-(data.branchBidPrice*data.branchCount+data.boxBidPrice*data.boxCount);
      	   	    		}else{
+     	   	    			if(data.branchCount>8||data.boxCount>8){
+     	   	    			transaction=transaction-(data.branchPrice*data.branchCount+data.boxPrice*data.boxCount)/0.8;
+     	      	   	    			}
                             transaction=transaction-(data.branchPrice*data.branchCount+data.boxPrice*data.boxCount);
      	   	    		}
      	    		   $("#transaction").val(transaction);

@@ -49,22 +49,22 @@ public class BillController {
 		example.setPageSize(limit);
 		example.setOrderByClause("player_time desc");
 		BillExample.Criteria criteria = example.createCriteria();
-		BillExample.Criteria criteria2 = example.createCriteria();
+		//BillExample.Criteria criteria2 = example.createCriteria();
 		if (StringUtils.isNotBlank(intoOrOutStatus)) {
 			criteria.andIntoOrOutStatusEqualTo(Integer.parseInt(intoOrOutStatus));
-			criteria2.andIntoOrOutStatusEqualTo(Integer.parseInt(intoOrOutStatus));
+			//criteria2.andIntoOrOutStatusEqualTo(Integer.parseInt(intoOrOutStatus));
 		}
 		if (StringUtils.isNotBlank(startDate)) {
 			criteria.andCreateTimeGreaterThan(startDate);
-			criteria2.andCreateTimeGreaterThan(startDate);
+			//criteria2.andCreateTimeGreaterThan(startDate);
 		}
 		if (StringUtils.isNotBlank(endDate)) {
 			criteria.andCreateTimeLessThan(endDate);
-			criteria2.andCreateTimeGreaterThan(startDate);
+			//criteria2.andCreateTimeGreaterThan(startDate);
 		}
 		 if (StringUtils.isNotBlank(lineOrderStatus)) {
 				criteria.andLineOrderStatusEqualTo(Integer.parseInt(lineOrderStatus));
-				criteria2.andLineOrderStatusEqualTo(Integer.parseInt(lineOrderStatus));
+			//	criteria2.andLineOrderStatusEqualTo(Integer.parseInt(lineOrderStatus));
 		}
 		 
 		if (StringUtils.isNotBlank(keywords)) {
@@ -72,12 +72,12 @@ public class BillController {
 			keywords = "%" + keywords + "%";
 			// and or联合查询
 			criteria.andOrderCodeLike(keywords);
-			criteria2.andOrderCodeLike(keywords);
-			example.or(criteria2);
+		//	criteria2.andOrderCodeLike(keywords);
+		//	example.or(criteria2);
 		}
 		
 		criteria.andStatusEqualTo(1);
-		criteria2.andStatusEqualTo(1);
+		//criteria2.andStatusEqualTo(1);
 		
 		/*if(intoOrOutStatus!=null) {
 			if (keywords != null && keywords != "") {
@@ -124,16 +124,24 @@ public class BillController {
 
 		int count = 0;
 		SysUser currentLoginUser = (SysUser) session.getAttribute("CurrentLoginUserInfo");
+		
+		
 		// 编辑账单
-		if (null != bill.getId() && bill.getId() > 0) {
-
+		if (null != bill.getId() && bill.getId() > 0) {        
 			count = billMapper.updateByPrimaryKeySelective(bill);
+		} else {	
+			// 新增账单
+			bill.setStatus(1);
+			bill.setLineOrderStatus(1);
+			bill.setCreater(currentLoginUser.getLoginId());
+			bill.setCreateTime(DateUtil.DateToString(new Date(), "yyyy-MM-dd "));
+			count = billMapper.insert(bill);
 
-		} else {
-			// 更新库存
-			List<GoodsExtendsPojo> list = JsonUtils.jsonToList(bill.getGoodsIds(), GoodsExtendsPojo.class);
-			// 进货 状态 0
-			if(list!=null&list.size()>0) {
+		}
+		// 更新库存
+		List<GoodsExtendsPojo> list = JsonUtils.jsonToList(bill.getGoodsIds(), GoodsExtendsPojo.class);
+		// 进货 状态 0
+		if (list != null & list.size() > 0) {
 			if (bill.getIntoOrOutStatus().equals(0)) {
 				for (GoodsExtendsPojo goodsExtendsPojo : list) {
 					Goods goodsSql = goodsMapper.selectByPrimaryKey(goodsExtendsPojo.getId());
@@ -154,15 +162,6 @@ public class BillController {
 					goodsMapper.updateByPrimaryKeySelective(goodsSql);
 				}
 			}
-			}
-			// 新增账单
-			bill.setStatus(1);
-			bill.setLineOrderStatus(1);
-			bill.setCreater(currentLoginUser.getLoginId());
-			bill.setCreateTime(DateUtil.DateToString(new Date(), "yyyy-MM-dd "));
-			count = billMapper.insert(bill);
-			// 输出前台Json
-
 		}
 		JsonPrintUtil.printObjDataWithKey(response, count, "data");
 	}
@@ -194,7 +193,10 @@ public class BillController {
 	// 账单查看
 	@RequestMapping(value = "show", method = RequestMethod.POST)
 	@ResponseBody
-	public void show(int id, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	public void show(Integer id, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		if(id==null) {
+			JsonPrintUtil.printObjDataWithKey(response, null, "data");
+		}
 		Bill bill = billMapper.selectByPrimaryKey(id);
 		if (null != bill) {
 			JsonPrintUtil.printObjDataWithKey(response, bill, "data");

@@ -83,6 +83,7 @@
 			       {type: 'checkbox'}
 				  ,{field: 'loginId', title: '<span style="color:#000;font-weight:bold;">账号</span>',align: 'center'}
 			      ,{field: 'name', title: '<span style="color:#000;font-weight:bold;">姓名</span>',align: 'center'}
+			      ,{field: 'status', title: '<span style="color:#000;font-weight:bold;">管理员角色</span>',align: 'center',templet: "#status"}
 			      ,{field: 'creater', title: '<span style="color:#000;font-weight:bold;">创建者</span>',align: 'center'}
 			      ,{field: 'createTime', title: '<span style="color:#000;font-weight:bold;">创建时间</span>',align: 'center'}
 			      ,{field: 'updater', title: '<span style="color:#000;font-weight:bold;">更新者</span>',align: 'center'}
@@ -319,5 +320,17 @@
 	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" style="font-size:10px;"><i class="layui-icon">&#xe642;</i>编辑</a>
 	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="del" style="font-size:10px;"><i class="layui-icon">&#xe640;</i>删除</a>
 </script>
+<script type="text/html" id="status">
+		{{#  if( d.status=== 1){ }} 
+        老板
+        {{#  } }} 
+        
+        {{#  if( d.status=== 2){ }}
+       售货员
+        {{#  } }} 
+    {{#  if( d.status=== 3){ }}
+       送货员
+        {{#  } }} 
+	</script>
 </body>
 </html>

@@ -39,6 +39,11 @@ public class loginFilter implements Filter{
 				return;
 			}
 		}
+          
+          if(page.matches(Const.NO_INTERCEPTOR_PATH)) {
+        	  arg2.doFilter(arg0, arg1);
+        	  return;
+          }
 		//继续向下执行
           arg2.doFilter(arg0, arg1);
 	}

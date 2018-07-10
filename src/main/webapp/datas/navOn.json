@@ -18,12 +18,12 @@
       ]
   },{
     "title": "商品管理",
-    "icon": "fa fa-users",
+    "icon": "fa fa-cubes",
     "spread": true,
     "children": [
       {
         "title": "商品管理",
-        "icon": "fa fa-user-circle-o",
+        "icon": "fa fa-cube",
         "href": "admin/goodsList.jsp",
         "spread": false
       },{
@@ -33,12 +33,12 @@
         "spread": false
       },{
         "title": "品牌管理",
-        "icon": "fa fa-user-circle-o",
+        "icon": "fa fa-bandcamp",
         "href": "admin/braAgnTypList.jsp?roleStatus=1",
         "spread": false
       },{
         "title": "种类管理",
-        "icon": "fa fa-user-circle-o",
+        "icon": "fa fa-list-ul",
         "href": "admin/braAgnTypList.jsp?roleStatus=3",
         "spread": false
       }
@@ -46,12 +46,12 @@
   }, 
   {
     "title": "订单管理",
-    "icon": "fa-cubes",
+    "icon": "fa fa-list-alt",
     "spread": true,
     "children": [
       {
         "title": "进/出货订单管理", 
-        "icon": "fa fa-map-o",
+        "icon": "fa fa-list-alt",
         "href": "admin/billList.jsp",
         "spread": false
       }
@@ -59,12 +59,12 @@
   }, 
   {
     "title": "库存管理",
-    "icon": "fa-cubes",
+    "icon": "fa fa-database",
     "spread": true,
     "children": [
       {
         "title": "库存查看", 
-        "icon": "fa fa-map-o",
+        "icon": "fa fa-database",
         "href": "admin/stockList.jsp",
         "spread": false
       }
@@ -72,12 +72,12 @@
   },
   {
     "title": "账单总览",
-    "icon": "fa-cubes",
+    "icon": "fa fa-pie-chart",
     "spread": true,
     "children": [
       {
         "title": "收入/支出统计", 
-        "icon": "fa fa-map-o",
+        "icon": "fa fa-pie-chart",
         "href": "admin/outIntoCount.jsp",
         "spread": false
       }

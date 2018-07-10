@@ -4,7 +4,6 @@
 <%
 String  id=request.getParameter("id");
 String  intoOrOutStatus=request.getParameter("intoOrOutStatus");
-
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,7 +46,12 @@ dd {
 </head>
 <body class="body">
 
-	<form class="layui-form" action="">	
+	<form class="layui-form" action="">
+		<input type="hidden" name="goodsIds" id="goodsIds"/>
+	<input type="hidden" name="intoOrOutStatus" value="<%=intoOrOutStatus%>"/>	
+		<c:if test="<%=id!=null%>">
+			<input type="hidden" name="id" id="id" value="<%=id%>" />
+		</c:if>
 		<fieldset class="layui-elem-field">
 			<c:if test="<%=intoOrOutStatus.equals(\"0\")%>">
 			 <legend>进货基本信息</legend>			
@@ -65,7 +69,7 @@ dd {
 								class="layui-input layui-form-danger"
 								style="height: 26px; font-size: 12px;">
 						</div>
-						 <label class="layui-form-label" style="font-size:12px;line-height:10px;">管理员角色</label>
+						 <label class="layui-form-label" style="font-size:12px;line-height:10px;">订单状态</label>
 	         <div class="layui-input-inline">
 	           <select name="lineOrderStatus" disabled id="lineOrderStatus" lay-verify="required">
 	            <option value="" selected >请选择</option>
@@ -135,13 +139,18 @@ dd {
                 , upload = layui.upload;
         var $ = layui.jquery;
         table = layui.table;
-  
+     
        
       //重新渲染表单
       function renderForm(){
     	  form.render();
       }
        
+      //关闭窗口按钮
+      $("#close").click(function(){
+     	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+     	parent.layer.close(index);
+     });
       //表单元素赋值
       var billId = <%=id %>;
       if(billId!=null){
@@ -165,11 +174,7 @@ dd {
         });   
       }
         
-        //关闭窗口按钮
-        $("#close").click(function(){
-        	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-        	parent.layer.close(index);
-        });
+       
      
         if(<%=intoOrOutStatus%>==0){
        	 tableDataHTMl=[    

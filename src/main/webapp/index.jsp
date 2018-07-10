@@ -30,7 +30,7 @@ SysUser currentLoginUser = (SysUser) session.getAttribute("CurrentLoginUserInfo"
 					<div class="admin-login-box">
                         <!--logo-->
 						<a class="logo" style="left: 0;" href="">
-							<span style="font-size: 22px;color:#fff;">冰糕厂后台管理</span>
+							<span style="font-size: 22px;color:#fff;">冷食城后台管理</span>
 						</a>
 						<div class="admin-side-toggle">
 							<i class="fa fa-bars" aria-hidden="true"></i>
